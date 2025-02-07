@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">	
+	  <!-- Page Heading -->
+	  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+	      <h1 class="h3 mb-0 text-gray-800">공지사항</h1>
+	  </div>
+		<!-- Hided Values for Unique id and values -->
+		<!--/*@thymesVar id="notice_id" type="text"*/-->
+		<input type="text" style="display:none;" id="notice_id" th:value="${notice_id}" readonly/>
+		<input type="text" style="display:none;" id="isAdd" th:value="${#sets.isEmpty(notice)?true:false}" readonly/>
+
+		<input type="text" style="display:none;" id="selected_from_date" th:value="${#sets.isEmpty(notice)?'':#temporals.format(notice.fromDate, 'yyyy-MM-dd')}" readonly/>
+		<input type="text" style="display:none;" id="selected_to_date" th:value="${#sets.isEmpty(notice)?'':#temporals.format(notice.toDate, 'yyyy-MM-dd')}" readonly/>
+
+		<!-- Content Row -->
+		<div class="row">
+			<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+						<h5 class="h5 text-gray-800">기간</h5>
+
+
+						<div class="navbar-nav ml-auto">
+							<div class="nav-item dropdown">
+								<div class="datepicker">
+									<input type="text" class="selected-check-date" id="from-datepicker-input">
+									~
+									<input type="text" class="selected-check-date" id="to-datepicker-input">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Content Row -->
+		<div class="row">
+			<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+						<h5 class="h5 text-gray-800">제목</h5>
+						<input class="form-control" type="text" id="title_area" placeholder="제목을 입력해 주세요." th:value="${#sets.isEmpty(notice)?'':notice.title}"></input>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Content Row -->
+		<div class="row">
+			<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+						<h5 class="h5 text-gray-800">상세내용</h5>
+						<textarea class="form-control" id="detail_area" rows="10" style="width:100%;resize:none;" placeholder="내용을 입력해 주세요." th:text="${#sets.isEmpty(notice)?'':notice.detail}"></textarea>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Content Row -->
+		<div class="row">
+			<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+						<h5 class="h5 text-gray-800">파일첨부
+						</h5>
+						<!-- We'll transform this input into a pond -->
+						<input type="file" class="filepond" name="filepond"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Content Row -->
+		<div class="row">
+			<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+				<div class="align-items-center justify-content-between mb-4">
+					<div class="col mr-2">
+
+						<a th:if="${#sets.isEmpty(notice)}" onClick="checkData()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+								class="fas fa-save fa-sm text-white-50"></i>&nbsp저장</a>
+						<a th:unless="${#sets.isEmpty(notice)}" onClick="checkData()" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
+								class="fas fa-save fa-sm text-white-50"></i>&nbsp수정</a>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+
+		<script class="code-js">
+			document.addEventListener("DOMContentLoaded", function() {
+				// Date range picker init START
+				var selectedFromDate = new Date();
+				var selectedToDate =  new Date();
+				if(document.getElementById("selected_from_date").value) {
+					selectedFromDate = new Date(document.getElementById("selected_from_date").value);
+				}
+				if(document.getElementById("selected_to_date").value) {
+					selectedToDate = new Date(document.getElementById("selected_to_date").value);
+				}
+				var today = new Date();
+
+				flatpickr(document.getElementById("from-datepicker-input"),{
+					dateFormat: "Y-m-d",
+					defaultDate: selectedFromDate,
+				});
+
+				flatpickr(document.getElementById("to-datepicker-input"),{
+					dateFormat: "Y-m-d",
+					defaultDate: selectedToDate,
+				});
+
+				// Date range picker init END
+
+				/**
+				 * ====================
+				 *      File Pond
+				 * ====================
+				 */
+				//File Uploader (Filepond.js) set option Start
+				FilePond.setOptions({
+					server: {
+						process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+							// fieldName is the name of the input field
+							// file is the actual file object to send
+							const formData = new FormData();
+							formData.append("document_id", document.getElementById("notice_id").value);
+							formData.append("file", file);
+							const request = new XMLHttpRequest();
+							request.open('POST', '/file/upload');
+
+							// Should call the progress method to update the progress to 100% before calling load
+							// Setting computable to false switches the loading indicator to infinite mode
+							request.upload.onprogress = (e) => {
+								progress(e.lengthComputable, e.loaded, e.total);
+							};
+
+							// Should call the load method when done and pass the returned server file id
+							// this server file id is then used later on when reverting or restoring a file
+							// so your server knows which file to return without exposing that info to the client
+							request.onload = function () {
+								if (request.status >= 200 && request.status < 300) {
+									// the load method accepts either a string (id) or an object
+									var response = JSON.parse(request.response);
+									var file_id = response.data;
+									file.id = file_id;
+									load(request.responseText);
+								} else {
+									// Can call the error method if something is wrong, should exit after
+									error('oh no');
+								}
+							};
+
+							request.send(formData);
+
+							// Should expose an abort method so the request can be cancelled
+							return {
+								abort: () => {
+									// This function is entered if the user has tapped the cancel button
+									request.abort();
+
+									// Let FilePond know the request has been cancelled
+									abort();
+								},
+							};
+						},remove: (processResult, load, error) => {
+							// 'source' is the path of the file and should be sent to a server endpoint via http
+
+							console.log(processResult);
+							console.log(processResult.split('/')[3].trim())
+							const formData = new FormData();
+							formData.append("document_id", document.getElementById("notice_id").value);
+							formData.append("file_id", processResult.split('/')[3].trim());
+							const request = new XMLHttpRequest();
+							request.open('POST', '/file/delete');
+							// Should call the progress method to update the progress to 100% before calling load
+							// Setting computable to false switches the loading indicator to infinite mode
+
+							// Should call the load method when done and pass the returned server file id
+							// this server file id is then used later on when reverting or restoring a file
+							// so your server knows which file to return without exposing that info to the client
+							request.onload = function () {
+								if (request.status >= 200 && request.status < 300) {
+									// the load method accepts either a string (id) or an object
+									var response = JSON.parse(request.response);
+									Swal.fire({
+										position: "center",
+										icon: "success",
+										title: "삭제 완료",
+										showConfirmButton: false,
+										timer: 1500
+									});
+									console.log(response);
+
+									load(request.responseText);
+								} else {
+									// Can call the error method if something is wrong, should exit after
+									Swal.fire({
+										position: "center",
+										icon: "error",
+										title: "삭제 실패",
+										showConfirmButton: false,
+										timer: 1500
+									});
+								}
+							};
+
+							request.send(formData);
+
+							// Should expose an abort method so the request can be cancelled
+							return {
+								abort: () => {
+									// This function is entered if the user has tapped the cancel button
+									request.abort();
+
+									// Let FilePond know the request has been cancelled
+									abort();
+								},
+							};
+							// call the load method before ending the function
+						}
+					}
+					// 파일 올리는 즉시 업로드 끄기
+					, instantUpload: false
+					, allowImageExifOrientation: true
+					, allowImagePreview: true
+					, acceptedFileTypes: [
+						'image/*',
+						'application/pdf',
+						'application/x-zip-compressed',
+						'text/plain',
+						'application/msword',
+						'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+						'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+						'application/vnd.ms-powerpoint',
+					]
+					, allowProcess: false
+					, maxParallelUploads: 10 // 한번에 올릴 수 있는 파일 개수
+					, maxFiles: 10
+					, maxTotalFileSize: "200MB"
+					, allowMultiple: true
+					, allowRemove: true
+				});
+
+			});
+			// Select the file input and use
+			// create() to turn it into a pond
+			// filepond js 만들기
+			FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation);
+			var fileUploader = FilePond.create(document.querySelector('.filepond'));
+			// 등록된 파일 불러오는곳
+			document.addEventListener('FilePond:init', function () {
+				const documentId = document.getElementById("notice_id").value;
+				const request = new XMLHttpRequest();
+				request.open('GET', '/file/selectDocumentFiles?documentId=' + documentId);
+
+				// Should call the progress method to update the progress to 100% before calling load
+				// Setting computable to false switches the loading indicator to infinite mode
+				request.upload.onprogress = (e) => {
+					progress(e.lengthComputable, e.loaded, e.total);
+				};
+
+				// Should call the load method when done and pass the returned server file id
+				// this server file id is then used later on when reverting or restoring a file
+				// so your server knows which file to return without exposing that info to the client
+
+
+				request.onload = function () {
+					if (request.status >= 200 && request.status < 300) {
+						// the load method accepts either a string (id) or an object
+						var response = JSON.parse(request.response);
+						var code = response.status;
+						var files = response.data;
+						console.log(response);
+						console.log(files.length);
+						var file;
+						for (var j = 0; j < files.length; j++) {
+							console.log(files[j]);
+
+							fileUploader.addFile("/file/filedownload/"+files[j].fileId);
+							// 보여지는 파일 이름
+							fileUploader.getFiles()[0].file.name = files[j].fileOriginalName;
+							fileUploader.getFiles()[0].file.source = files[j].base64;
+							// 이미 업로드 된 파일 재업로드 안되도록
+							fileUploader.getFiles()[0].origin = 3;
+
+							console.log(fileUploader.getFiles());
+						}
+
+					} else {
+						// Can call the error method if something is wrong, should exit after
+						Swal.fire({
+							position: "center",
+							icon: "error",
+							title: "조회 실패",
+							showConfirmButton: false,
+							timer: 1500
+						});
+					}
+				};
+
+				request.send();
+
+			}, {once: true});
+
+
+			/*첨부파일*/
+			function checkData(){
+				var isAdd = document.getElementById("isAdd").value == 'true';
+				var isAllDataInput = true;
+				if(!document.getElementById("notice_id").value){
+					isAllDataInput = false;
+				}
+				if(!document.getElementById("from-datepicker-input").value) isAllDataInput = false;
+				if(!document.getElementById("to-datepicker-input").value) isAllDataInput = false;
+				if(!document.getElementById("title_area").value) isAllDataInput = false;
+				if(!document.getElementById("detail_area").value) isAllDataInput = false;
+				if (isAllDataInput){
+					console.log(fileUploader.getFiles().length);
+					if(fileUploader.getFiles().length > 0 ){
+						fileUploader.processFiles().then(function(){
+							if (isAdd) {
+								addNoticeDetail();
+							} else {
+								editNoticeDetail();
+							}
+						});
+					}else{
+						if (isAdd) {
+							addNoticeDetail();
+						} else {
+							editNoticeDetail();
+						}
+					}
+				}
+
+			}
+
+			function addNoticeDetail(){
+				const formData = new FormData();
+				formData.append("notice_id", document.getElementById("notice_id").value);
+				formData.append("from_date", document.getElementById("from-datepicker-input").value);
+				formData.append("to_date", document.getElementById("to-datepicker-input").value);
+				formData.append("title", document.getElementById("title_area").value);
+				formData.append("detail", document.getElementById("detail_area").value);
+
+				const request = new XMLHttpRequest();
+				request.open('POST', '/notice/notice_add');
+				request.onload = function () {
+					if (request.status >= 200 && request.status < 300) {
+						// the load method accepts either a string (id) or an object
+						var response = JSON.parse(request.response);
+						var code = response.status;
+						console.log("저장됨")
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "저장 성공",
+							showConfirmButton: false,
+							timer: 1500
+						}).then((result) => {
+							if(result.dismiss === Swal.DismissReason.timer){
+								location.href="/notice/notice_view?notice_id="+document.getElementById("notice_id").value;
+							}
+						});
+
+					} else {
+						Swal.fire({
+							position: "center",
+							icon: "error",
+							title: "저장 실패",
+							showConfirmButton: false,
+							timer: 1500
+						}).then((result) => {
+							if(result.dismiss === Swal.DismissReason.timer){
+								location.reload();
+							}
+						});
+					}
+
+				}
+				request.send(formData);
+			}
+
+			function editNoticeDetail(){
+				const formData = new FormData();
+				formData.append("notice_id", document.getElementById("notice_id").value);
+				formData.append("from_date", document.getElementById("from-datepicker-input").value);
+				formData.append("to_date", document.getElementById("to-datepicker-input").value);
+				formData.append("title", document.getElementById("title_area").value);
+				formData.append("detail", document.getElementById("detail_area").value);
+
+				const request = new XMLHttpRequest();
+				request.open('POST', '/notice/notice_edit');
+				request.onload = function () {
+					if (request.status >= 200 && request.status < 300) {
+						// the load method accepts either a string (id) or an object
+						var response = JSON.parse(request.response);
+						var code = response.status;
+						console.log("저장됨")
+						Swal.fire({
+							position: "center",
+							icon: "success",
+							title: "수정 성공",
+							showConfirmButton: false,
+							timer: 1500
+						}).then((result) => {
+							if(result.dismiss === Swal.DismissReason.timer){
+								location.href="/notice/notice_view?notice_id="+document.getElementById("notice_id").value;
+							}
+						});
+
+					} else {
+						Swal.fire({
+							position: "center",
+							icon: "error",
+							title: "수정 실패",
+							showConfirmButton: false,
+							timer: 1500
+						}).then((result) => {
+							if(result.dismiss === Swal.DismissReason.timer){
+								location.reload();
+							}
+						});
+					}
+
+				}
+				request.send(formData);
+			}
+
+		</script>
+	</div>
+</html>

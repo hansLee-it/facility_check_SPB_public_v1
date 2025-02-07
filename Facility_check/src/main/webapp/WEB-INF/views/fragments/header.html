@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	
+	<!-- Topbar -->
+	<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" th:fragment="headerFragment">
+
+	    <!-- Sidebar Toggle (Topbar) -->
+	    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+	        <i class="fa fa-bars"></i>
+	    </button>
+
+		<div class="header_date" id="header_date">0000년 0월 0일 (일)</div>
+		&nbsp
+		<div class="header_time" id="header_time">00:00:00</div>
+
+		<script>
+			const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+			function updateClock() {
+				var now = new Date();
+				var hours = now.getHours().toString().padStart(2, '0');
+				var minutes = now.getMinutes().toString().padStart(2, '0');
+				var seconds = now.getSeconds().toString().padStart(2, '0');
+
+				document.getElementById('header_time').textContent = `${hours}:${minutes}:${seconds}`;
+			}
+
+			function updateDate() {
+				var now = new Date();
+				var year = now.getUTCFullYear();
+				var month = now.getUTCMonth()+1;
+				var day = now.getDate();
+				var strDay = now.getUTCDay();
+
+				document.getElementById('header_date').textContent = `${year}년 ${month}월 ${day}일 (${daysOfWeek[strDay]})`;
+			}
+
+			window.onload = function(){
+				// Update Date
+				updateDate();
+
+				// Update time every second
+				setInterval(updateClock, 1000);
+				// Update time in every refresh page
+				updateClock();
+			}
+		</script>
+	    <!-- Topbar Navbar -->
+	    <ul class="navbar-nav ml-auto">
+	
+	
+	        <div class="topbar-divider d-none d-sm-block"></div>
+	
+	        <!-- Nav Item - User Information -->
+	        <li class="nav-item dropdown no-arrow">
+	            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+	                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                <span class="mr-2 d-none d-lg-inline text-gray-600 small" th:text="${session.user_name}">Douglas McGee</span>
+	                <img class="img-profile rounded-circle"
+	                    th:src="@{/assets/external_src/bootstrap_theme/img/undraw_profile.svg}">
+	            </a>
+	            <!-- Dropdown - User Information -->
+	            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+	                aria-labelledby="userDropdown">
+	                <a class="dropdown-item" th:href="@{/settings/my_info/my_info_view}">
+	                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+	                    내 프로필
+	                </a>					
+					<a class="dropdown-item" th:href="@{/notice/notice_list}">
+					    <i class="fas fa-bell fa-sm fa-fw mr-2 text-gray-400"></i>
+					    공지사항
+					</a>
+	                <a class="dropdown-item" th:href="@{/works/facility_check/facility_check_write}">
+	                    <i class="fas fa-check-double fa-sm fa-fw mr-2 text-gray-400"></i>
+	                    소방점검 작성
+	                </a>
+	                <div class="dropdown-divider"></div>
+	                <a class="dropdown-item" th:href="@{/logout}" data-toggle="modal" data-target="#logoutModal">
+	                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+	                    로그아웃
+	                </a>
+	            </div>
+	        </li>
+	
+	    </ul>
+	
+	</nav>
+	<!-- End of Topbar -->
+</html>

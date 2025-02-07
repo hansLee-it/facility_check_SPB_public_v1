@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">계정 관리</h1>
+    </div>
+    <!-- Datas -->
+    <input style="display:none;" id="userUid" th:value="${userUid}" />
+
+    <!-- NEW WRITE -->
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    추가할 계정
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">아이디</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" th:if="${#sets.isEmpty(user)}" id="new-id-input" class="text-lg mb-0 bg-white table-bordered rounded" />
+                    <input style="width:100%;" th:unless="${#sets.isEmpty(user)}" th:value="${user.userId}" id="new-id-input" disabled class="text-lg mb-0 bg-gray table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">사용자명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" type="text" id="new-name-input" th:value="${#sets.isEmpty(user)?'':user.userName}" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row align-items-center"  th:if="${#sets.isEmpty(user)}" >
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">비밀번호</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" type="password" id="new-password-input" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">비밀번호 확인</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" type="password" id="check-password-input" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="" >핸드폰 번호</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" type="tel" id="new-phone-input" th:value="${#sets.isEmpty(user)?'':user.phoneNumber}" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a th:if="${#sets.isEmpty(user)}" onclick="validateUserId()" id="new-line-button" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;">
+                        <i class="fas fa-check fa-sm text-yellow-50"></i>아이디 중복체크 </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a href="#" id="id-check-confirm" style="display:none;" class="btn btn-success btn-circle">
+                        <i class="fas fa-check"></i>
+                        <input style="display:none;" id="validate-user-id" value="0" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a th:if="${#sets.isEmpty(user)}" onclick="addUser()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;">
+                        <i class="fas fa-save fa-sm text-white-50"></i>&nbsp등록
+                    </a>
+                    <a th:unless="${#sets.isEmpty(user)}" onclick="editUser()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;">
+                        <i class="fas fa-save fa-sm text-white-50"></i>&nbsp수정
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--NEW WRITE END -->
+
+
+    <script>
+        document.getElementById("new-phone-input").onchange = function(){
+            phoneInput();
+        };
+        document.getElementById("new-phone-input").oninput = function(){
+            phoneInput();
+        };
+        document.getElementById("new-phone-input").onpaste = function(){
+            phoneInput();
+        };
+        function phoneInput(){
+
+            const phone = document.getElementById("new-phone-input").value;
+            const cleanInput = phone.replaceAll(/[^0-9]/g, "");
+            let result = "";
+            const length = cleanInput.length;
+            if(length === 8) {
+                result = cleanInput.replace(/(\d{4})(\d{4})/, '$1-$2');
+            } else if(cleanInput.startsWith("02") && (length === 9 || length === 10)) {
+                result = cleanInput.replace(/(\d{2})(\d{3,4})(\d{4})/, '$1-$2-$3');
+            } else if(!cleanInput.startsWith("02") && (length === 10 || length === 11)) {
+                result = cleanInput.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+            } else if(length < 8){
+                result = cleanInput;
+            } else {
+                result = cleanInput.replace(/(\d{3})(\d{3,4})(\d{4})/, '$1-$2-$3');
+            }
+
+            document.getElementById("new-phone-input").value = result;
+        }
+
+        function validateUserId(){
+            let userId = document.getElementById("new-id-input").value;
+            if(!userId){
+
+                isConfirmed = false;
+                Swal.fire({
+                    title: "아이디를 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }else if(userId.length < 6){
+
+                Swal.fire({
+                    title: "아이디를 6자 이상 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }else{
+                const request = new XMLHttpRequest();
+                request.open('get', '/settings/account/check_user_id?user_id=' + userId);
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        console.log(response);
+                        if(response.data < 2){
+                            document.getElementById("validate-user-id").value = 1;
+                            document.getElementById("id-check-confirm").style.display = "block";
+                            Swal.fire({
+                                title: "사용가능 한 아이디 입니다.",
+                                icon: "success",
+                                confirmButtonText: "확인",
+                                showCloseButton: true
+                            });
+                        }else{
+                            Swal.fire({
+                                title: "중복된 아이디가 있습니다.",
+                                icon: "error",
+                                confirmButtonText: "확인",
+                                showCloseButton: true
+                            });
+                        }
+
+
+                    } else {
+                        Swal.fire({
+                            title: "수정 실패했습니다.",
+                            icon: "error",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        });
+                    }
+
+                }
+                request.send();
+            }
+
+        }
+
+        function addUser(){
+            let userUid = document.getElementById("userUid").value;
+            let userId = document.getElementById("new-id-input").value;
+            let userName = document.getElementById("new-name-input").value;
+            let userPassword = document.getElementById("new-password-input").value;
+            let checkPassword = document.getElementById("check-password-input").value;
+            let userPhoneNumber = document.getElementById("new-phone-input").value;
+            let validateUserId = document.getElementById("validate-user-id").value;
+
+            userPassword = userPassword.trim();
+            checkPassword = checkPassword.trim();
+
+            var isConfirmed = true;
+            if(!userUid) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "정상적인 접근이 아닙니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        location.href="/settings/account";
+                    }
+                });
+            }
+            if(!userId) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "아이디를 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(parseInt(validateUserId) !== 1) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "아이디 중복확인이 필요합니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(userId.length < 6) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "아이디를 6자 이상 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(!userName) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "사용자명을 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(!userPassword) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "비밀번호를 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(userPassword.length < 6) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "비밀번호를 6자 이상 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(!checkPassword) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "비밀번호 확인을 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(!userPhoneNumber) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "핸드폰 번호를 입력 해 주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if(userPassword !== checkPassword) {
+                false;
+                Swal.fire({
+                    title: "비밀번호 확인이 일치하지 않습니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if(isConfirmed){
+                const formData = new FormData();
+                formData.append("userUid", userUid);
+                formData.append("userId", userId);
+                formData.append("userName", userName);
+                formData.append("userPassword", userPassword);
+                formData.append("userPhoneNumber", userPhoneNumber);
+
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/account/add_account');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        console.log(response);
+                        Swal.fire({
+                            title: "등록 완료 되었습니다",
+                            icon: "success",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        }).then((result) => {
+                            if(result.isConfirmed){
+                                location.href="/settings/account";
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "등록 실패했습니다.",
+                            icon: "error",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+
+        }
+        function editUser(){
+            let userUid = document.getElementById("userUid").value;
+            let userName = document.getElementById("new-name-input").value;
+            let userPhoneNumber = document.getElementById("new-phone-input").value;
+
+            var isConfirmed = true;
+            if(!userUid) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "정상적인 접근이 아닙니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        location.href="/settings/account";
+                    }
+                });
+                return false;
+            }
+            if(!userName) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "사용자명을 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(!userPhoneNumber) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "핸드폰 번호를 입력 해 주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if(isConfirmed){
+                const formData = new FormData();
+                formData.append("userUid", userUid);
+                formData.append("userName", userName);
+                formData.append("userPhoneNumber", userPhoneNumber);
+
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/account/edit_account');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        console.log(response);
+                        Swal.fire({
+                            title: "수정 완료 되었습니다",
+                            icon: "success",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        }).then((result) => {
+                            if(result.isConfirmed){
+                                location.href="/settings/account";
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "수정 실패했습니다.",
+                            icon: "error",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+        }
+    </script>
+</div>
+</html>

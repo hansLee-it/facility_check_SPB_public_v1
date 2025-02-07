@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">
+		  <!-- Page Heading -->
+		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+		      <h1 class="h3 mb-0 text-gray-800">기타작업</h1>
+		  </div>
+
+
+		<input type="hidden" id="searchedDate" th:value="${searched_date}"/>
+		<input type="hidden" id="isDateSelected" value="0" />
+		<input type="hidden" id="workStatus" th:value="${selected_status}" />
+		<input type="hidden" id="selectedLine" th:value="${station_shop.lineId}"/>
+		<input type="hidden" id="selectedStation" th:value="${station_shop.stationId}"/>
+		<input type="hidden" id="selectedShop" th:value="${station_shop.shopId}"/>
+
+				  
+		 <div class="card shadow mb-4">
+		     <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+		         <h6 class="m-0 font-weight-bold text-primary">기타작업 목록</h6>
+		     </div>
+			 <!-- Content Row -->
+			 <div class="row" style="text-align:center;">
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="location.href='/works/extra_work/extra_work_list'" id="search-all-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow-sm" style="display: block !important;"><i
+									 class="fas fa-undo fa-sm"></i>&nbsp필터 초기화</a>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="showDatePicker()" id="search-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
+									 class="fas fa-calendar fa-sm text-yellow-50"></i>&nbsp기간 선택</a>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="changeStatus(1)" id="work-done" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow-sm" style="display: block !important;"><i
+									 class="fas fa-check-circle fa-sm text-yellow-50"></i>&nbsp완료 작업</a>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="changeStatus(0)" id="work-undone" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
+									 class="fas fa-unlink fa-sm text-yellow-50"></i>&nbsp미완료 작업</a>
+						 </div>
+					 </div>
+				 </div>
+			 </div>
+
+			 <!-- Content Row -->
+			 <div class="row" style="text-align:center;">
+				 <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <nav class="navbar navbar-expand navbar-light bg-light mb-4" style="padding:0;">
+								 <ul class="navbar-nav ml-auto">
+									 <li class="nav-item dropdown">
+										 <a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#strings.isEmpty(station_shop.lineName)? '호선' : station_shop.lineName}" th:data-value="${#strings.isEmpty(station_shop.lineId)? '' : station_shop.lineId}"
+											id="line-parent"  value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											 호선
+										 </a>
+										 <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="line-child-group" aria-labelledby="navbarDropdown">
+
+										 </div>
+									 </li>
+								 </ul>
+							 </nav>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <nav class="navbar navbar-expand navbar-light bg-light mb-4" style="padding:0;">
+								 <ul class="navbar-nav ml-auto">
+									 <li class="nav-item dropdown">
+										 <a class="nav-link dropdown-toggle" href="#" th:text="${#strings.isEmpty(station_shop.stationName)? '역' : station_shop.stationName}" th:data-value="${#strings.isEmpty(station_shop.stationId)? '' : station_shop.stationId}" id="station-parent" readonly="true" value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											 역
+										 </a>
+										 <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="station-child-group" aria-labelledby="navbarDropdown">
+											 <a class="dropdown-item" href="#">호선부터 선택해주세요</a>
+										 </div>
+									 </li>
+								 </ul>
+							 </nav>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <nav class="navbar navbar-expand navbar-light bg-light mb-4" style="padding:0;">
+								 <ul class="navbar-nav ml-auto">
+									 <li class="nav-item dropdown">
+										 <a class="nav-link dropdown-toggle" href="#" th:text="${#strings.isEmpty(station_shop.shopName)? '가게' : station_shop.shopName}" th:data-value="${#strings.isEmpty(station_shop.shopId)? '' : station_shop.shopId}" id="shop-parent" role="button" value="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											 가게명 선택
+										 </a>
+										 <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="shop-child-group" aria-labelledby="navbarDropdown">
+											 <a class="dropdown-item" href="#">역부터 선택해주세요</a>
+										 </div>
+									 </li>
+								 </ul>
+							 </nav>
+						 </div>
+					 </div>
+				 </div>
+				 <div class="col-lg-3 col-xl-3 col-md-3">
+					 <div class="align-items-center justify-content-between mb-4 float-right">
+						 <div class="col mr-2">
+							 <div id="allDatePicker">
+								 <input type="text" disabled value="전체기간">
+							 </div>
+							 <div class="datepicker" id="datePicker" style="display:none;vertical-align: -webkit-baseline-middle;">
+								 <input type="date" class="selected-check-date" id="search-datepicker-input" style="vertical-align: -webkit-baseline-middle;" />
+							 </div>
+						 </div>
+					 </div>
+				 </div>
+			 </div>
+
+			 <div class="card-body">
+				 <div class="table-responsive">
+					 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+						 <thead>
+						 <tr class="text-center">
+							 <th>번호</th>
+							 <th>역명</th>
+							 <th>가게명</th>
+							 <th>제목</th>
+							 <th>게시기간</th>
+							 <th>작성날짜</th>
+							 <th>작성자</th>
+							 <th>완료여부</th>
+						 </tr>
+						 </thead>
+						 <tbody class="text-center">
+							 <tr th:if="${#sets.isEmpty(extraWorkList)}">
+								 <td>0</td>
+								 <td>없음</td>
+								 <td>없음</td>
+								 <td>없음</td>
+								 <td>없음</td>
+								 <td>없음</td>
+								 <td>없음</td>
+							 </tr>
+
+
+							 <tr th:each="extraWork, index : ${extraWorkList}" th:onclick="|location.href='@{/works/extra_work/extra_work_view(extraWorkId=${extraWork.extraWorkId})}'|">
+								 <td th:text="${(page_index*10)+index.count}"></td>
+								 <td th:text="${extraWork.stationName}">System Architect</td>
+								 <td th:if="${not extraWork.isAllShop}" th:text="${extraWork.shopName}">System Architect</td>
+								 <td th:if="${extraWork.isAllShop}">전체</td>
+								 <td th:text="${extraWork.title}" class="text-left">System Architect</td>
+								 <td th:text="${#temporals.format(extraWork.fromDate, 'yyyy-MM-dd')}">2011/04/25</td>
+								 <td th:text="${#temporals.format(extraWork.toDate, 'yyyy-MM-dd')}">2011/04/25</td>
+								 <td th:text="${extraWork.editorName}">2011/04/25</td>
+								 <td th:if="${extraWork.isDone == 1}"><a href="#" class="btn btn-success btn-circle btn-sm"><i class="fas fa-check"></i></a></td>
+								 <td th:if="${extraWork.isDone == 0}"><a href="#" class="btn btn-warning btn-circle btn-sm"><i class="fas fa-exclamation-triangle"></i></a></td>
+							 </tr>
+						 </tbody>
+					 </table>
+
+					 <div style="text-align: center;">
+
+						 <a th:if="${(next_page_index*10) > 0}" th:onclick="|indexLink(${(next_page_index - 1)*9},${next_page_index - 1})|"
+							class="custom-prev-index">이전</a>
+						 <a th:each="i : ${#numbers.sequence((next_page_index*10)+1, (next_page_index*10)+10)}" th:onclick="|indexLink(${i-1},${next_page_index})|"
+							th:if="${i <= max_page_index}" th:text="${i}" th:class="${i-1 == page_index ? 'custom-selected-index' : 'custom-index'}"></a>
+
+
+						 <a th:if="${page_index+10 < max_page_index}"  th:onclick="|indexLink(${(next_page_index+1)*9},${next_page_index+1})|"
+							class="custom-next-index">다음</a>
+					 </div>
+				 </div>
+				 <a th:href="@{/works/extra_work/extra_work_write}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+						 class="fas fa-pen fa-sm text-white-50"></i>&nbsp작성</a>
+			 </div>
+
+	  
+	     <script class="code-js">
+
+
+			 const table = new basictable('#dataTable');
+
+			 var searchDate = new Date();
+			 if(document.getElementById("searchedDate").value) {
+				 showDatePicker();
+				 document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
+				 document.getElementById("isDateSelected").value = 1;
+				 searchDate = new Date(document.getElementById("searchedDate").value);
+			 }
+
+			 flatpickr(document.getElementById("search-datepicker-input"),{
+				 dateFormat: "Y-m-d",
+				 defaultDate: searchDate,
+				 onChange: function(){
+					 changeEvent();
+				 }
+			 });
+
+			 let workStatus = parseInt(document.getElementById("workStatus").value);
+			 if(workStatus === 1){
+				 document.getElementById("work-done").classList.replace("btn-outline-success","btn-success");
+			 }else if(workStatus === 0){
+				 document.getElementById("work-undone").classList.replace("btn-outline-warning","btn-warning");
+			 }
+
+			 getLineList();
+			 /*EDIT PAGE setting*/
+			 var lineParent = document.getElementById("line-parent");
+			 var lineParentText = lineParent.innerText;
+			 var lineParentValue = lineParent.getAttribute("data-value");
+			 var stationParent = document.getElementById("station-parent");
+			 var stationParentText = stationParent.innerText;
+			 var stationParentValue = stationParent.getAttribute("data-value");
+			 var shopParent = document.getElementById("shop-parent");
+			 var shopParentText = shopParent.innerText;
+			 var shopParentValue = shopParent.getAttribute("data-value");
+			 if (lineParentValue) {
+				 getStationList(lineParentValue);
+				 stationParent.innerText = stationParentText;
+				 stationParent.setAttribute("data-value", stationParentValue);
+				 if (stationParentValue) {
+					 getShopList(stationParentValue);
+					 shopParent.innerText = shopParentText;
+					 shopParent.setAttribute("data-value", shopParentValue);
+
+				 }
+			 }
+			 function getLineList() {
+				 /*[GET] station line list*/
+				 const request = new XMLHttpRequest();
+				 request.open('get', '/code/all_line');
+				 request.onload = function () {
+					 if (request.status >= 200 && request.status < 300) {
+						 // the load method accepts either a string (id) or an object
+						 var response = JSON.parse(request.response);
+						 var code = response.status;
+						 var childGroup = document.getElementById("line-child-group");
+						 childGroup.innerHTML = "";
+						 //<a class="dropdown-item line-child" href="#">Action</a>
+						 response.data.forEach(function (e) {
+							 console.log(e);
+							 var newChild = document.createElement("a");
+							 newChild.classList.add("dropdown-item");
+							 newChild.classList.add("line-child");
+							 newChild.href = "#";
+							 newChild.setAttribute("data-value", e.id)
+							 newChild.innerText = e.name;
+							 newChild.onclick = function () {
+								 var lineParent = document.getElementById("line-parent");
+								 lineParent.setAttribute("data-value", this.getAttribute("data-value"));
+								 lineParent.innerHTML = this.innerHTML;
+								 getStationList(this.getAttribute("data-value"));
+
+								 document.getElementById("station-parent").removeAttribute("data-value");
+								 document.getElementById("station-parent").innerHTML = "역";
+								 document.getElementById("shop-parent").removeAttribute("data-value");
+								 document.getElementById("shop-parent").innerHTML = "가게";
+
+								 changeEvent();
+
+							 }
+							 childGroup.append(newChild);
+						 })
+
+					 } else {
+						 alert("정상수신실패:" + request.status);
+					 }
+
+				 }
+				 request.send();
+			 }
+
+
+			 function getStationList(lineId){
+				 /*[GET] station list*/
+				 const request = new XMLHttpRequest();
+				 request.open('get', '/code/stations_on_line?line_id='+lineId);
+				 request.onload = function () {
+					 if (request.status >= 200 && request.status < 300) {
+						 // the load method accepts either a string (id) or an object
+						 var response = JSON.parse(request.response);
+						 var childGroup = document.getElementById("station-child-group");
+
+						 childGroup.innerHTML = "";
+						 //<a class="dropdown-item line-child" href="#">Action</a>
+						 response.data.forEach(function (e) {
+							 console.log(e);
+							 var newChild = document.createElement("a");
+							 newChild.classList.add("dropdown-item");
+							 newChild.classList.add("station-child");
+							 newChild.href="#";
+							 newChild.setAttribute("data-value",e.id)
+							 newChild.innerText=e.name;
+							 newChild.onclick = function(){
+								 var stationParent = document.getElementById("station-parent");
+								 stationParent.setAttribute("data-value",this.getAttribute("data-value"));
+								 stationParent.innerHTML = this.innerHTML;
+								 getShopList(this.getAttribute("data-value"));
+
+
+								 document.getElementById("shop-parent").removeAttribute("data-value");
+								 document.getElementById("shop-parent").innerHTML = "가게";
+								 changeEvent();
+							 }
+							 childGroup.append(newChild);
+						 })
+
+					 } else {
+						 alert("정상수신실패:"+request.status);
+					 }
+
+				 }
+				 request.send();
+			 }
+			 function getShopList(stationId){
+				 /*[GET] station list*/
+				 const request = new XMLHttpRequest();
+				 request.open('get', '/code/shops_in_station?station_id='+stationId);
+				 request.onload = function () {
+					 if (request.status >= 200 && request.status < 300) {
+						 // the load method accepts either a string (id) or an object
+						 var response = JSON.parse(request.response);
+						 console.log(response);
+						 var childGroup = document.getElementById("shop-child-group");
+
+
+						 childGroup.innerHTML = "";
+						 //<a class="dropdown-item line-child" href="#">Action</a>
+						 response.data.forEach(function (e) {
+							 console.log(e);
+							 var newChild = document.createElement("a");
+							 newChild.classList.add("dropdown-item");
+							 newChild.classList.add("shop-child");
+							 newChild.href="#";
+							 newChild.setAttribute("data-value",e.id);
+							 newChild.innerText=e.name;
+							 newChild.onclick = function(){
+								 var shopParent = document.getElementById("shop-parent");
+								 shopParent.setAttribute("data-value",this.getAttribute("data-value"));
+								 shopParent.innerHTML = this.innerHTML;
+								 changeEvent();
+							 }
+							 childGroup.append(newChild);
+						 })
+
+					 } else {
+						 alert("정상수신실패:"+request.status);
+					 }
+
+				 }
+				 request.send();
+			 }
+
+
+			 function indexLink(pageIndex,nextPageIndex) {
+				 let searchedDate = document.getElementById("searchedDate").value;
+				 let selectedLine = document.getElementById("selectedLine").value;
+				 let selectedStation = document.getElementById("selectedStation").value;
+				 let selectedShop = document.getElementById("selectedShop").value;
+				 let isDateSelected = parseInt(document.getElementById("isDateSelected").value);
+				 let workStatus = parseInt(document.getElementById("workStatus").value);
+				 let path = "/works/extra_work/extra_work_list";
+				 if(isDateSelected === 1){
+					 location.href = path + "?"
+							 + "selected_status=" + workStatus + "&"
+							 + "page_index=" + pageIndex + "&"
+							 + "next_page_index=" + nextPageIndex + "&"
+							 + "search_date=" + searchedDate + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }else{
+					 location.href = path + "?"
+							 + "selected_status=" + workStatus + "&"
+							 + "page_index=" + pageIndex + "&"
+							 + "next_page_index=" + nextPageIndex + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }
+			 }
+
+			 function showDatePicker(){
+				 let datePicker = document.getElementById("datePicker");
+				 let allDateInput = document.getElementById("allDatePicker");
+				 document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
+				 document.getElementById("isDateSelected").value = 1;
+				 datePicker.style.display = "block";
+				 allDateInput.style.display = "none";
+			 }
+
+			 function changeEvent() {
+				 let selectedLine = document.getElementById("line-parent").getAttribute('data-value');
+				 let selectedStation = document.getElementById("station-parent").getAttribute('data-value');
+				 let selectedShop = document.getElementById("shop-parent").getAttribute('data-value');
+				 let searchDate = document.getElementById("search-datepicker-input").value;
+				 let isDateSelected = parseInt(document.getElementById("isDateSelected").value);
+				 let workStatus = parseInt(document.getElementById("workStatus").value);
+				 let path = "/works/extra_work/extra_work_list";
+				 if(isDateSelected === 1){
+					 location.href = path + "?"
+							 + "selected_status=" + workStatus + "&"
+							 + "search_date=" + searchDate + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }else{
+					 location.href = path + "?"
+							 + "selected_status=" + workStatus + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }
+			 }
+
+			 function changeStatus(status){
+				 let selectedLine = document.getElementById("line-parent").getAttribute('data-value');
+				 let selectedStation = document.getElementById("station-parent").getAttribute('data-value');
+				 let selectedShop = document.getElementById("shop-parent").getAttribute('data-value');
+				 let searchDate = document.getElementById("search-datepicker-input").value;
+				 let isDateSelected = parseInt(document.getElementById("isDateSelected").value);
+				 let path = "/works/extra_work/extra_work_list";
+				 if(isDateSelected === 1){
+					 location.href = path + "?"
+							 + "selected_status=" + status + "&"
+							 + "search_date=" + searchDate + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }else{
+					 location.href = path + "?"
+							 + "selected_status=" + status + "&"
+							 + "selected_line=" + selectedLine + "&"
+							 + "selected_station=" + selectedStation + "&"
+							 + "selected_shop=" + selectedShop;
+				 }
+
+			 }
+	     </script>
+
+	</div>
+</html>

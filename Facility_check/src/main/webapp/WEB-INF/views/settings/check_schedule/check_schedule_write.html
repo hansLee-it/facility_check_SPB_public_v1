@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">점검 일정 관리</h1>
+    </div>
+    <!-- Datas -->
+    <input type="text" id="checkScheduleId" th:value="${#sets.isEmpty(check_schedule)?checkScheduleId:check_schedule.checkScheduleId}" style="display:none;"/>
+    <input type="text" id="isAdd" th:value="${#sets.isEmpty(check_schedule)?true:false}" style="display:none;"/>
+
+    <!-- NEW WRITE -->
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    추가할 점검 일정
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">점검 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9 col-xl-9 col-md-9 mb-9">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" id="subject-input" oninput="checkMaxLength()"
+                           th:value="${#sets.isEmpty(check_schedule)?'':check_schedule.subject}"
+                           class="text-lg mb-0 bg-white table-bordered rounded"
+
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">달 선택</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-3">
+                    <div class="custom-select-radio">
+                        <input class="custom-radio" id="isOddMonth" name="check-month" type="radio" value="0"
+                               th:checked="${#sets.isEmpty(check_schedule)?false:(check_schedule.isOddMonth?true:false)}"
+                        />
+                        <label class="form-check-label" for="isOddMonth">
+                            홀수 달
+                        </label>
+                        <input class="custom-radio" id="isEvenMonth" name="check-month" type="radio" value="1"
+                               th:checked="${#sets.isEmpty(check_schedule)?false:(check_schedule.isEvenMonth?true:false)}"
+                        />
+                        <label class="form-check-label" for="isEvenMonth">
+                            짝수 달
+                        </label>
+                        <input class="custom-radio" id="isEveryMonth" name="check-month" type="radio" value="2"
+                               th:checked="${#sets.isEmpty(check_schedule)?false:(check_schedule.isEveryMonth?true:false)}"
+                        />
+                        <label class="form-check-label" for="isEveryMonth">
+                            매 달
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">점검 일자</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%;" type="number" id="check-day-input"
+                           onChange="checkDateRange()" onratechange="checkDateRange()"
+                           class="text-lg mb-0 bg-white table-bordered rounded"
+                           th:value="${#sets.isEmpty(check_schedule)?'':check_schedule.checkDay}"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a href="#" id="id-check-confirm" style="display:none;" class="btn btn-success btn-circle">
+                        <i class="fas fa-check"></i>
+                        <input style="display:none;" id="validate-user-id" value="0" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a th:if="${#sets.isEmpty(check_schedule)}" onclick="addCheckSchedule()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;">
+                        <i class="fas fa-save fa-sm text-white-50"></i>&nbsp등록
+                    </a>
+                    <a th:unless="${#sets.isEmpty(check_schedule)}" onclick="editCheckSchedule()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;">
+                        <i class="fas fa-save fa-sm text-white-50"></i>&nbsp수정
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--NEW WRITE END -->
+
+
+    <script>
+        function checkMaxLength(){
+            let inputBox = document.getElementById("subject-input");
+            if(inputBox.value.length > 80) {
+                Swal.fire({
+                    title: "80자까지 입력 가능합니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        inputBox.value = inputBox.value.slice(0, 80);
+                    }
+                });
+            }
+        }
+        function checkDateRange(){
+            let inputBox = document.getElementById("check-day-input");
+            if(inputBox.value>31) {
+                inputBox.value = 1;
+            }
+            if(inputBox.value <1) {
+                inputBox.value = 31;
+            }
+        }
+        function addCheckSchedule(){
+            let checkScheduleId = document.getElementById("checkScheduleId").value;
+            let subject = document.getElementById("subject-input").value;
+            let isEveryMonth = document.getElementById("isEveryMonth").checked;
+            let isOddMonth = document.getElementById("isOddMonth").checked;
+            let isEvenMonth = document.getElementById("isEvenMonth").checked;
+            let checkDay = document.getElementById("check-day-input").value;
+
+            var isCheckValidate = 0;
+            if(isEveryMonth) isCheckValidate += 1;
+            if(isOddMonth) isCheckValidate += 1;
+            if(isEvenMonth) isCheckValidate += 1;
+
+            var isConfirmed = true;
+
+            if(isCheckValidate !== 1) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검 달을 정상적으로 선택해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+            }
+
+            if(!checkScheduleId) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "정상적인 접근이 아닙니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        location.href="/settings/check_schedule/check_schedule_write";
+                    }
+                });
+            }
+            if(!subject) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검명을 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(checkDay < 1 || checkDay > 31) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검 일자를 1~31 사이로 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if(isConfirmed){
+                let checkScheduleId = document.getElementById("checkScheduleId").value;
+                let subject = document.getElementById("subject-input").value;
+                let isEveryMonth = document.getElementById("isEveryMonth").checked;
+                let isOddMonth = document.getElementById("isOddMonth").checked;
+                let isEvenMonth = document.getElementById("isEvenMonth").checked;
+                let checkDay = document.getElementById("check-day-input").value;
+                const formData = new FormData();
+                formData.append("check_schedule_id", checkScheduleId);
+                formData.append("subject", subject);
+                formData.append("is_every_month", isEveryMonth);
+                formData.append("is_odd_month", isOddMonth);
+                formData.append("is_even_month", isEvenMonth);
+                formData.append("check_day", checkDay);
+
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/check_schedule/check_schedule_write');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        console.log(response);
+                        Swal.fire({
+                            title: "등록 완료 되었습니다",
+                            icon: "success",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        }).then((result) => {
+                            if(result.isConfirmed){
+                                location.href="/settings/check_schedule";
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "등록 실패했습니다.",
+                            icon: "error",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+
+        }
+        function editCheckSchedule(){
+            let checkScheduleId = document.getElementById("checkScheduleId").value;
+            let subject = document.getElementById("subject-input").value;
+            let isEveryMonth = document.getElementById("isEveryMonth").checked;
+            let isOddMonth = document.getElementById("isOddMonth").checked;
+            let isEvenMonth = document.getElementById("isEvenMonth").checked;
+            let checkDay = document.getElementById("check-day-input").value;
+
+            var isCheckValidate = 0;
+            if(isEveryMonth) isCheckValidate += 1;
+            if(isOddMonth) isCheckValidate += 1;
+            if(isEvenMonth) isCheckValidate += 1;
+
+            var isConfirmed = true;
+
+            if(isCheckValidate !== 1) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검 달을 정상적으로 선택해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+            }
+
+            if(!checkScheduleId) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "정상적인 접근이 아닙니다.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        location.href="/settings/check_schedule/check_schedule_write";
+                    }
+                });
+            }
+            if(!subject) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검명을 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+            if(checkDay < 1 || checkDay > 31) {
+                isConfirmed = false;
+                Swal.fire({
+                    title: "점검 일자를 1~31 사이로 입력해주세요.",
+                    icon: "error",
+                    confirmButtonText: "확인",
+                    showCloseButton: true
+                });
+                return false;
+            }
+
+            if(isConfirmed){
+                let checkScheduleId = document.getElementById("checkScheduleId").value;
+                let subject = document.getElementById("subject-input").value;
+                let isEveryMonth = document.getElementById("isEveryMonth").checked;
+                let isOddMonth = document.getElementById("isOddMonth").checked;
+                let isEvenMonth = document.getElementById("isEvenMonth").checked;
+                let checkDay = document.getElementById("check-day-input").value;
+                const formData = new FormData();
+                formData.append("check_schedule_id", checkScheduleId);
+                formData.append("subject", subject);
+                formData.append("is_every_month", isEveryMonth);
+                formData.append("is_odd_month", isOddMonth);
+                formData.append("is_even_month", isEvenMonth);
+                formData.append("check_day", checkDay);
+
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/check_schedule/check_schedule_edit');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        console.log(response);
+                        Swal.fire({
+                            title: "수정 완료 되었습니다",
+                            icon: "success",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        }).then((result) => {
+                            if(result.isConfirmed){
+                                location.href="/settings/check_schedule";
+                            }
+                        });
+
+                    } else {
+                        Swal.fire({
+                            title: "수정 실패했습니다.",
+                            icon: "error",
+                            confirmButtonText: "확인",
+                            showCloseButton: true
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+
+        }
+    </script>
+</div>
+</html>

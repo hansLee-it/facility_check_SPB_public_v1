@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.FileMapper">
+    <insert id="insertFile">
+        INSERT INTO file(
+             file_id
+            ,document_id
+            ,file_type
+            ,file_path
+            ,file_name
+            ,file_original_name
+            ,file_suffix
+            ,file_size
+        ) VALUES(
+             #{fileId}
+            ,#{documentId}
+            ,#{fileType}
+            ,#{filePath}
+            ,#{fileName}
+            ,#{fileOriginalName}
+            ,#{fileSuffix}
+            ,#{fileSize}
+        );
+    </insert>
+    <select id="selectFile" resultType="hans.firefighting.check.facility_check.file.FileDTO">
+        SELECT
+             file_id
+            ,document_id
+            ,file_type
+            ,file_path
+            ,file_name
+            ,file_original_name
+            ,file_suffix
+            ,file_size
+            ,generate_time
+        FROM
+            file
+        WHERE
+            file_id = #{fileId};
+    </select>
+    <select id="selectFileList" resultType="hans.firefighting.check.facility_check.file.FileDTO">
+        SELECT
+             file_id
+            ,document_id
+            ,file_type
+            ,file_path
+            ,file_name
+            ,file_original_name
+            ,file_suffix
+            ,file_size
+            ,generate_time
+        FROM
+            file
+        WHERE
+            enabled = true
+          AND
+            document_id = #{documentId};
+    </select>
+    <select id="selectDeletedFileList" resultType="hans.firefighting.check.facility_check.file.FileDTO">
+        SELECT
+             file_id
+            ,document_id
+            ,file_type
+            ,file_path
+            ,file_name
+            ,file_original_name
+            ,file_suffix
+            ,file_size
+            ,generate_time
+            ,delete_time
+        FROM
+            file
+        WHERE
+            enabled = false;
+    </select>
+    <update id="disableFile">
+        UPDATE file
+        SET
+            enabled = false
+          ,delete_time = NOW()
+        WHERE
+            file_id = #{fileId};
+    </update>
+
+    <delete id="deleteFile">
+        DELETE FROM file
+        WHERE
+            file_id = #{fileId};
+    </delete>
+</mapper>

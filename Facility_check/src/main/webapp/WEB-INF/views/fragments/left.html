@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<!-- Sidebar -->
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar"	th:fragment="leftFragment">
+
+        <!-- Sidebar - Brand -->
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" th:href="@{/home}">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">Facility Check</div>
+        </a>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0">
+
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>대시보드</span></a>				
+			<a class="nav-link" th:href="@{/notice/notice_list}">
+			    <i class="fas fa-fw fa-bell"></i>
+			    <span>공지사항</span></a>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+            작업
+        </div>
+
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFire"
+                aria-expanded="true" aria-controls="collapseFire">
+                <i class="fas fa-fw fa-check-double"></i>
+                <span>소방점검</span>
+            </a>
+            <div id="collapseFire" class="collapse" aria-labelledby="headingFire"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/works/facility_check/facility_check_list}">조회</a>
+                    <a class="collapse-item" th:href="@{/works/facility_check/facility_check_write}">작성</a>
+                </div>
+            </div>
+        </li>			
+			
+		<!-- Nav Item - Utilities Collapse Menu -->
+		<li class="nav-item">
+		    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMeasure"
+		        aria-expanded="true" aria-controls="collapseMeasure">
+		        <i class="fas fa-fw fa-shower"></i>
+		        <span>수도검침</span>
+		    </a>
+		    <div id="collapseMeasure" class="collapse" aria-labelledby="headingMeasure"
+		        data-parent="#accordionSidebar">
+		        <div class="bg-white py-2 collapse-inner rounded">				
+					<a class="collapse-item" th:href="@{/works/measure/measure_list}">조회</a>
+					<a class="collapse-item" th:href="@{/works/measure/measure_write}">작성</a>
+		        </div>
+		    </div>
+		</li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEquipment"
+               aria-expanded="true" aria-controls="collapseEquipment">
+                <i class="fas fa-fw fa-fire-extinguisher"></i>
+                <span>장비현황</span>
+            </a>
+            <div id="collapseEquipment" class="collapse" aria-labelledby="headingEquipment"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/works/equipment/equipment_check_list}">조회</a>
+                    <a class="collapse-item" th:href="@{/works/equipment/equipment_check_write}">작성</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseImprovement"
+               aria-expanded="true" aria-controls="collapseImprovement">
+                <i class="fas fa-fw fa-check-square"></i>
+                <span>개선현황</span>
+            </a>
+            <div id="collapseImprovement" class="collapse" aria-labelledby="headingImprovement"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" th:href="@{/works/improvement/improvement_list}">조회</a>
+                    <a class="collapse-item" th:href="@{/works/improvement/improvement_write}">작성</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+		<li class="nav-item">
+		    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExtra"
+		        aria-expanded="true" aria-controls="collapseExtra">
+		        <i class="fas fa-fw fa-paste"></i>
+		        <span>기타작업</span>
+		    </a>
+		    <div id="collapseExtra" class="collapse" aria-labelledby="headingExtra"
+		        data-parent="#accordionSidebar">
+		        <div class="bg-white py-2 collapse-inner rounded">				
+					<a class="collapse-item" th:href="@{/works/extra_work/extra_work_list}">조회</a>
+					<a class="collapse-item" th:href="@{/works/extra_work/extra_work_write}">작성</a>
+		        </div>
+		    </div>
+		</li>
+        <!-- Divider -->
+        <hr class="sidebar-divider">
+
+        <!-- Heading -->
+        <div class="sidebar-heading">
+           	관리
+        </div>
+
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+
+			<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAccount"
+			aria-expanded="true" aria-controls="collapseAccount">
+                <i class="fas fa-fw fa-address-card"></i>
+                <span>계정</span>
+            </a>
+            <div id="collapseAccount" class="collapse" aria-labelledby="headingAccount"
+                data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">내 정보</h6>
+                    <a class="collapse-item" th:href="@{/settings/my_info/my_info_view}">프로필 조회</a>
+                    <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">계정 관리</h6>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/account/account_list}">계정 관리</a>
+                    <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">이력</h6>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/log/user_log}">활동 이력</a>
+                </div>
+            </div>
+        </li>
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInfo"
+               aria-expanded="true" aria-controls="collapseInfo">
+                <i class="fas fa-fw fa-wrench"></i>
+                <span>정보관리</span>
+            </a>
+            <div id="collapseInfo" class="collapse" aria-labelledby="headingInfo"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">일정 관리</h6>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/check_schedule/check_schedule_list}">점검 일정 관리</a>
+                    <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">시설 관리</h6>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/facility/station_list}">지하철 관리</a>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/facility/shop_list}">매장 관리</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Charts -->
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/logout}">
+                <i class="fas fa-fw	fa-sign-out-alt"></i>
+                <span>로그아웃</span></a>
+        </li>
+
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Sidebar Toggler (Sidebar) -->
+        <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        </div>
+
+    </ul>
+	
+    <!-- End of Sidebar -->
+
+</html>

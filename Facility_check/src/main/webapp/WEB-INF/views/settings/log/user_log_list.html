@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">
+		  <!-- Page Heading -->
+		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+		      <h1 class="h3 mb-0 text-gray-800">유저 로그</h1>
+		  </div>	  
+	   
+			 
+				  
+		 <div class="card shadow mb-4">
+		     <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+		         <h6 class="m-0 font-weight-bold text-primary">로그 목록</h6>
+		     </div>
+		     <div class="card-body">
+		         <div class="table-responsive">
+					 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+						 <thead>
+						 <tr class="text-center">
+							 <th>아이디</th>
+							 <th>유저명</th>
+							 <th>접속IP</th>
+							 <th>페이지</th>
+							 <th>활동</th>
+							 <th>결과</th>
+							 <th>날짜</th>
+							 <th>시간</th>
+						 </tr>
+						 </thead>
+						 <tbody class="text-center">
+						 <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
+						 <!--/*@thymesVar id="noticeId" type="String"*/-->
+						 <tr th:each="userLog, index : ${userLogList}">
+							 <td th:text="${userLog.userId}">Tiger Nixon</td>
+							 <td th:text="${userLog.userName}">System Architect</td>
+							 <td th:text="${userLog.clientIp}">System Architect</td>
+							 <td th:text="${userLog.requestPage}">System Architect</td>
+							 <td th:text="${userLog.requestType}">System Architect</td>
+							 <td th:if="${userLog.resultStatus == -1}">조회</td>
+							 <td th:if="${userLog.resultStatus == 0}">실패</td>
+							 <td th:if="${userLog.resultStatus == 1}">성공</td>
+							 <td th:text="${#temporals.format(userLog.requestTime, 'yyyy년 MM월 dd일')}">년월일</td>
+							 <td th:text="${#temporals.format(userLog.requestTime, 'HH시 mm분 ss초')}">시분초</td>
+						 </tr>
+						 </tbody>
+					 </table>
+					 <div style="text-align: center;">
+
+						 <a th:if="${(next_page_index*10) > 0}" th:href="@{/settings/log/user_log(page_index=${(next_page_index - 1)*9},next_page_index=${next_page_index - 1})}"
+							class="custom-prev-index">이전</a>
+						 <a th:each="i : ${#numbers.sequence((next_page_index*10)+1, (next_page_index*10)+10)}" th:href="@{/settings/log/user_log(page_index=${i-1},next_page_index=${next_page_index})}"
+							th:if="${i <= max_page_index}" th:text="${i}" th:class="${i-1 == page_index ? 'custom-selected-index' : 'custom-index'}"></a>
+
+
+						 <a th:if="${page_index+10 < max_page_index}" th:href="@{/settings/log/user_log(page_index=${(next_page_index+1)*9},next_page_index=${next_page_index+1})}"
+							class="custom-next-index">다음</a>
+					 </div>
+		         </div>				 
+		     </div>
+		  </div>
+	  
+	     <script class="code-js">
+	     </script>
+
+	</div>
+</html>

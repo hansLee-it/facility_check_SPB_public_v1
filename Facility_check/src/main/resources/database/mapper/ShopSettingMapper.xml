@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.ShopSettingMapper">
+    <select id="selectShopList" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
+        SELECT
+             station.line_id AS line_id
+            ,station.line_name AS line_name
+            ,shop.station_id AS station_id
+            ,station.station_name AS station_name
+            ,shop.shop_id AS shop_id
+            ,shop.shop_name AS shop_name
+        FROM
+            shop
+        JOIN
+            station
+        ON
+            shop.station_id = station.station_id
+        ORDER BY station.line_name,station.station_name,shop.shop_name
+        LIMIT ${startIndex}, 10;
+    </select>
+    <select id="selectShop" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
+        SELECT
+             station.line_id AS line_id
+            ,station.line_name AS line_name
+            ,shop.station_id AS station_id
+            ,station.station_name AS station_name
+            ,shop.shop_id AS shop_id
+            ,shop.shop_name AS shop_name
+        FROM
+            shop
+        JOIN
+            station
+        ON
+            shop.station_id = station.station_id
+        WHERE
+            shop.shop_id = #{shopId};
+    </select>
+    <select id="countTotalShop">
+        SELECT
+            COUNT(shop_id)
+        FROM
+            shop
+    </select>
+    <insert id="insertShop">
+        INSERT INTO shop(
+             station_id
+            ,shop_id
+            ,shop_name
+        )VALUES(
+             #{stationId}
+            ,#{shopId}
+            ,#{shopName}
+       );
+    </insert>
+
+    <update id="updateShopName">
+        UPDATE
+            shop
+        SET
+            shop_name = #{shopName}
+        WHERE
+            shop_id = #{shopId}
+    </update>
+
+    <update id="updateShop">
+        UPDATE
+            shop
+        SET
+            shop_name = #{shopName}
+           ,station_id = #{station_id}
+        WHERE
+            shop_id = #{shopId}
+    </update>
+
+    <delete id="deleteShop">
+        DELETE FROM
+            shop
+        WHERE
+            shop_id = #{shopId}
+    </delete>
+
+    <select id="selectAllNames" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
+        SELECT
+             #{lineId} AS line_id
+            ,(SELECT
+                line_name
+              FROM
+                  station
+              WHERE
+                  line_id = #{lineId}
+              LIMIT 1
+              ) AS line_name
+            ,#{stationId} AS station_id
+            ,(SELECT
+                  station_name
+              FROM
+                  station
+              WHERE
+                  station_id = #{stationId}
+              LIMIT 1
+              ) AS station_name
+            ,#{shopId} AS shop_id
+            ,(SELECT
+                shop_name
+            FROM
+                shop
+            WHERE
+                shop_id = #{shopId}
+            LIMIT 1
+            ) AS shop_name
+        FROM
+            shop
+        LIMIT 1;
+    </select>
+</mapper>

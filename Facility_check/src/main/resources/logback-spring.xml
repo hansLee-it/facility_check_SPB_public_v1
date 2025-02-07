@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration scan="true" scanPeriod="30 seconds">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <springProfile name="local">
+        <logger name="jdbc" level="OFF"/>
+        <logger name="jdbc.sqlonly" level="OFF"/>
+        <logger name="jdbc.sqltiming" level="DEBUG"/>
+        <logger name="jdbc.audit" level="OFF"/>
+        <logger name="jdbc.resultset" level="OFF"/>
+        <logger name="jdbc.resultsettable" level="DEBUG"/>
+        <logger name="jdbc.connection" level="OFF"/>
+
+        <logger name="hans.firefighting.check" level="DEBUG" />
+        <logger name="org.springframework.jdbc" level="OFF" />
+        <logger name="org.mybatis" level="OFF" />
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <!-- Send debug message to file -->
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/logs/tomcat/sql.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/logs/tomcat/sql.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <!-- <maxHistory>30</maxHistory> -->
+                <!-- <totalSizeGap>1GB</totalSizeGap> -->
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %logger{35} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="jdbc" level="OFF"/>
+        <logger name="jdbc.sqlonly" level="OFF"/>
+        <logger name="jdbc.sqltiming" level="DEBUG"/>
+        <logger name="jdbc.audit" level="OFF"/>
+        <logger name="jdbc.resultset" level="OFF"/>
+        <logger name="jdbc.resultsettable" level="DEBUG"/>
+        <logger name="jdbc.connection" level="OFF"/>
+
+        <logger name="hans.firefighting.check" level="DEBUG" />
+        <logger name="org.springframework.jdbc" level="OFF" />
+        <logger name="org.mybatis" level="OFF" />
+
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+    <springProfile name="prod">
+        <!-- Send debug message to file -->
+        <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/data/logs/tomcat/sql.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>/data/logs/tomcat/sql.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                    <maxFileSize>30MB</maxFileSize>
+                </timeBasedFileNamingAndTriggeringPolicy>
+                <!-- <maxHistory>30</maxHistory> -->
+                <!-- <totalSizeGap>1GB</totalSizeGap> -->
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-4relative --- [ %thread{10} ] %logger{35} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <logger name="hans.firefighting.check" level="DEBUG" />
+        <logger name="org.springframework.jdbc" level="OFF" />
+        <logger name="org.mybatis" level="OFF" />
+
+        <root level="ERROR">
+            <appender-ref ref="FILE" />
+        </root>
+    </springProfile>
+</configuration>

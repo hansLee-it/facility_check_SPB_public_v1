@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.FacilityCheckMapper">
+
+    <select id="selectFacilityCheckList" resultType="hans.firefighting.check.facility_check.works.FacilityCheckDTO">
+        SELECT
+            facility_check.check_id AS check_id
+            ,facility_check.shop_id AS shop_id
+            ,shop.shop_name AS shop_name
+            ,shop.station_id AS station_id
+            ,station.station_name AS station_name
+            ,station.line_id AS line_id
+            ,station.line_name AS line_name
+            ,facility_check.check_date AS check_date
+        FROM
+            facility_check
+            JOIN
+                shop
+            ON
+                facility_check.shop_id = shop.shop_id
+            JOIN
+                station
+            ON
+                shop.station_id = station.station_id
+        WHERE
+            facility_check.enabled = true
+        <if test='searchDate != null'>
+            AND
+            #{searchDate} = facility_check.check_date
+        </if>
+        <if test='lineId != null and !lineId.equals("")'>
+            AND
+                station.line_id = #{lineId}
+        </if>
+        <if test='stationId != null and !stationId.equals("")'>
+            AND
+                station.station_id = #{stationId}
+        </if>
+        <if test='shopId != null and !shopId.equals("")'>
+            AND
+                facility_check.shop_id = #{shopId}
+        </if>
+        ORDER BY facility_check.generate_time DESC
+        LIMIT ${startIndex}, 10;
+    </select>
+    <select id="countTotalFacilityCheck">
+        SELECT
+            COUNT(check_id)
+        FROM
+            facility_check
+        WHERE
+            enabled = true
+    </select>
+
+    <select id="countTodayFacilityCheck">
+        SELECT
+            COUNT(check_id)
+        FROM
+            facility_check
+        WHERE
+            enabled = true
+        AND
+            check_date = CURRENT_DATE;
+    </select>
+    <select id="selectShopFacilityCheckOnDate" resultType="hans.firefighting.check.facility_check.works.FacilityCheckDTO">
+        SELECT
+             check_id
+            ,shop_id
+            ,fire_extinguisher_type
+            ,fire_extinguisher_count
+            ,memo
+            ,check_date
+            ,generate_time
+            ,edit_time
+        FROM
+            facility_check
+        WHERE
+            shop_id = #{shopId}
+        AND
+            check_date = #{checkDate}
+    </select>
+
+    <select id="selectFacilityCheck" resultType="hans.firefighting.check.facility_check.works.FacilityCheckDTO">
+        SELECT
+            facility_check.check_id AS check_id
+             ,facility_check.shop_id AS shop_id
+             ,shop.shop_name AS shop_name
+             ,shop.station_id AS station_id
+             ,station.station_name AS station_name
+             ,station.line_id AS line_id
+             ,station.line_name AS line_name
+             ,facility_check.fire_extinguisher_type AS fire_extinguisher_type
+             ,facility_check.fire_extinguisher_count AS fire_extinguisher_count
+             ,facility_check.memo AS memo
+             ,facility_check.check_date AS check_date
+             ,facility_check.generate_time AS generate_time
+             ,facility_check.edit_time AS edit_time
+        FROM
+            facility_check
+                JOIN
+            shop
+            ON
+                facility_check.shop_id = shop.shop_id
+                JOIN
+            station
+            ON
+                shop.station_id = station.station_id
+        WHERE
+            facility_check.check_id = #{checkId}
+    </select>
+    <select id="selectInspectionListByType" resultType="hans.firefighting.check.facility_check.works.InspectDTO">
+        SELECT
+             inspect_id
+            ,type
+            ,type_name
+            ,detail
+        FROM
+            inspect
+        WHERE
+            type = #{type}
+        ORDER BY 'order' ASC
+    </select>
+    <select id="selectAllInspectionList" resultType="hans.firefighting.check.facility_check.works.InspectDTO">
+        SELECT
+             inspect_id
+            ,type
+            ,type_name
+            ,detail
+        FROM
+            inspect
+        ORDER BY type,'order' ASC
+    </select>
+
+    <select id="selectShopInspectionObjectsOnDate" resultType="hans.firefighting.check.facility_check.works.InspectObjectDTO">
+        SELECT
+             inspect_object_id
+            ,inspect_id
+            ,check_id
+            ,response
+            ,generate_time
+            ,edit_time
+        FROM
+            inspect_object
+        WHERE
+            check_id = #{check_id}
+    </select>
+    <insert id="upsertFacilityCheck">
+        INSERT INTO facility_check
+        (
+             check_id
+            ,shop_id
+            ,fire_extinguisher_type
+            ,fire_extinguisher_count
+            ,memo
+            ,check_date
+            ,writer_id
+            ,generate_time
+            ,edit_time
+        ) VALUES (
+             #{checkId}
+            ,#{shopId}
+            ,#{fireExtinguisherType}
+            ,#{fireExtinguisherCount}
+            ,#{memo}
+            ,#{checkDate}
+            ,#{writerId}
+            ,NOW()
+            ,NOW()
+        ) ON DUPLICATE KEY UPDATE
+             fire_extinguisher_type = #{fireExtinguisherType}
+            ,fire_extinguisher_count = #{fireExtinguisherCount}
+            ,memo = #{memo}
+            ,editor_id = #{editorId}
+            ,edit_time = NOW();
+    </insert>
+
+    <insert id="upsertInspectionObject">
+        INSERT INTO inspect_object
+        (
+             inspect_object_id
+            ,inspect_id
+            ,check_id
+            ,response
+            ,generate_time
+            ,edit_time
+        ) VALUES (
+             #{inspectObjectId}
+            ,#{inspectId}
+            ,#{checkId}
+            ,#{response}
+            ,NOW()
+            ,NOW()
+        ) ON DUPLICATE KEY UPDATE
+            response = #{response}
+            ,edit_time = NOW();
+    </insert>
+</mapper>

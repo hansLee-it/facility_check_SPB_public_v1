@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">계정 관리</h1>
+    </div>
+    <!-- Datas -->
+    <input style="display:none;" id="userUid" th:value="${user.userUid}" />
+    <!-- NEW WRITE -->
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    계정 정보
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">아이디</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${user.userId}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">사용자명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${user.userName}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">핸드폰 번호</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${user.phoneNumber}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">마지막 로그인 일시</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(user.generateTime, 'yyyy-MM-dd')}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">생성일</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(user.generateTime, 'yyyy-MM-dd')}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800" style="">수정일</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(user.editTime, 'yyyy-MM-dd')}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a id="password-change-button" onClick="changePasswordPopup()" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
+                            class="fas fa-undo fa-sm text-yellow-50"></i>&nbsp비밀번호 변경</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a id="new-line-button"  th:onclick="|location.href='@{/settings/account/account_edit(user_uid=${user.userUid})}'|" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
+                            class="fas fa-reply fa-sm text-yellow-50"></i>&nbsp수정</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a th:onclick="deleteAccount()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+                            class="fas fa-trash fa-sm text-white-50"></i>&nbsp삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--NEW WRITE END -->
+
+
+    <script>
+
+        function changePasswordPopup(){
+            const userUid = document.getElementById("userUid").value;
+            Swal.fire({
+                title: "변경하실 비밀번호를 입력해주세요.",
+                input: "password",
+                inputAttributes: {
+                    autocapitalize: "off"
+                },
+                showCancelButton: true,
+                confirmButtonText: "변경",
+                cancelButtonText: "취소",
+                showLoaderOnConfirm: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = new FormData();
+                    formData.append("userUid", userUid);
+                    formData.append("newPassword", result.value);
+
+                    const request = new XMLHttpRequest();
+                    request.open('post', '/settings/account/change_password');
+                    request.onload = function () {
+                        if (request.status >= 200 && request.status < 300) {
+                            // the load method accepts either a string (id) or an object
+                            var response = JSON.parse(request.response);
+                            var code = response.status;
+                            if(response.data > 0){
+                                Swal.fire({
+                                    title: "성공"
+                                });
+                            }else{
+                                Swal.fire({
+                                    title: "실패"
+                                });
+                            }
+
+                        } else {
+                            Swal.showValidationMessage('수정 실패');
+                        }
+
+                    }
+                    request.send(formData);
+
+                }
+            });
+        }
+
+
+        function deleteAccount(){
+            const userUid = document.getElementById("userUid").value;
+
+            const formData = new FormData();
+            formData.append("userUid", userUid);
+
+            Swal.fire({
+                title: "삭제하시겠습니까?",
+                icon: "warning",
+                iconHtml: "?",
+                showDenyButton: true,
+                confirmButtonText: "삭제",
+                confirmButtonColor: "#dd6b55",
+                denyButtonText: "취소",
+                denyButtonColor: "#aaa",
+                showCloseButton: true
+            }).then((result) => {
+                if(result.isConfirmed){
+                    const request = new XMLHttpRequest();
+                    request.open('post', '/settings/account/delete_account');
+                    request.onload = function () {
+                        if (request.status >= 200 && request.status < 300) {
+                            // the load method accepts either a string (id) or an object
+                            var response = JSON.parse(request.response);
+                            console.log(response);
+                            Swal.fire({
+                                title: "삭제가 완료 되었습니다",
+                                icon: "success",
+                                confirmButtonText: "확인",
+                                showCloseButton: true
+                            }).then((result) => {
+                                if(result.isConfirmed){
+                                    location.reload();
+                                }
+                            });
+
+                        } else {
+                            Swal.fire({
+                                title: "삭제가 실패했습니다.",
+                                icon: "error",
+                                confirmButtonText: "확인",
+                                showCloseButton: true
+                            }).then((result) => {
+                                if(result.isConfirmed){
+                                    location.reload();
+                                }
+                            });
+                        }
+
+                    }
+                    request.send(formData);
+                }
+            });
+        }
+    </script>
+</div>
+</html>

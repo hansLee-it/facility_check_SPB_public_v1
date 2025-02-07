@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.UserMapper">
+    <insert id="insertUser">
+        INSERT INTO user(
+             user_uid
+            ,user_id
+            ,user_password
+            ,user_name
+            ,phone_number
+            ,generate_time
+            ,edit_time
+        )VALUES(
+             #{userUid}
+            ,#{userId}
+            ,#{userPassword}
+            ,#{userName}
+            ,#{phoneNumber}
+            ,NOW()
+            ,NOW()
+        );
+    </insert>
+    <insert id="insertUserRole">
+        INSERT INTO role(
+             role
+            ,user_uid
+        )VALUES(
+             "USER"
+            ,#{userUid}
+        );
+    </insert>
+    <select id="selectUserRoles">
+        SELECT
+            role
+        FROM
+            role
+        WHERE
+            user_uid = #{userUid};
+    </select>
+    <select id="selectUserCredentialById" resultType="hans.firefighting.check.facility_check.user.UserDTO">
+        SELECT
+             user_uid
+            ,user_id
+            ,user_password
+            ,user_name
+            ,phone_number
+            ,try_count
+            ,user_lock
+            ,generate_time
+            ,edit_time
+        FROM
+            user
+        WHERE
+            user_id = #{userId}
+    </select>
+    <select id="selectUserById" resultType="hans.firefighting.check.facility_check.user.UserDTO">
+        SELECT
+             user_uid
+            ,user_id
+            ,user_name
+            ,phone_number
+            ,generate_time
+            ,edit_time
+        FROM
+            user
+        WHERE
+            user_id = #{userId}
+    </select>
+
+    <select id="countUserId">
+        SELECT
+            COUNT(user_id)
+        FROM
+            user
+        WHERE
+            user_id = #{userId}
+    </select>
+    <select id="countAllUser">
+        SELECT
+            COUNT(user_uid)
+        FROM
+            user
+    </select>
+
+    <select id="selectUserByUid" resultType="hans.firefighting.check.facility_check.user.UserDTO">
+        SELECT
+             user_uid
+            ,user_id
+            ,user_name
+            ,phone_number
+            ,generate_time
+            ,edit_time
+        FROM
+            user
+        WHERE
+            user_uid = #{userUid}
+    </select>
+    <select id="selectUserList" resultType="hans.firefighting.check.facility_check.user.UserDTO">
+        SELECT
+             user_uid
+            ,user_id
+            ,user_name
+            ,phone_number
+            ,generate_time
+        FROM
+            user
+        WHERE
+            user_id != #{userId}
+        ORDER BY user_name,user_id
+        LIMIT ${startIndex}, 10;
+    </select>
+    <update id="updateUserPassword">
+        UPDATE
+            user
+        SET
+           user_password = #{userPassword}
+        WHERE
+            user_uid = #{userUid}
+    </update>
+    <update id="updateUserInfo">
+        UPDATE
+            user
+        SET
+             user_name = #{userName}
+            ,phone_number = #{phoneNumber}
+        WHERE
+            user_uid = #{userUid}
+    </update>
+    <delete id="deleteUser">
+        DELETE FROM
+            user
+        WHERE
+            user_uid = #{userUid}
+    </delete>
+</mapper>

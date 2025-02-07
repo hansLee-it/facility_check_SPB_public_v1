@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">가게 관리</h1>
+    </div>
+    <!-- Datas -->
+    <input style="display:none;" id="shopId" th:value="${shopId}"/>
+    <input style="display:none;" id="isAdd" th:value="${#sets.isEmpty(shop)?true:false}"/>
+    <!-- NEW WRITE -->
+    <!-- Content Row -->
+    <div class="row" th:if="${#sets.isEmpty(shop)}">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    추가할 가게
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(shop)}">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    수정할 가게
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">호선</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4" id="line-select-parent" >
+                <nav id="line-select-nav" class="navbar navbar-expand navbar-light bg-light mb-4">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#sets.isEmpty(shop)? '선택' : shop.lineName}" th:data-value="${#sets.isEmpty(shop)? '' : shop.lineId}"
+                               id="line-parent"  value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                선택
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="line-child-group" aria-labelledby="navbarDropdown">
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">지하철 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4" id="station-select-parent" >
+                <nav id="station-select-nav" class="navbar navbar-expand navbar-light bg-light mb-4">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#sets.isEmpty(shop)? '선택' : shop.stationName}" th:data-value="${#sets.isEmpty(shop)? '' : shop.stationId}"
+                               id="station-parent"  value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                선택
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="station-child-group" aria-labelledby="navbarDropdown">
+                                <span>호선 먼저 선택해주세요.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row align-items-center">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">가게명 </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%" id="shop-input" th:value="${#sets.isEmpty(shop)?'':shop.shopName}" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row" th:if="${#sets.isEmpty(shop)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="addShop()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+                            class="fas fa-save fa-sm text-white-50"></i>&nbsp저장</a>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!--NEW WRITE END -->
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(shop)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="editShop()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+                            class="fas fa-download fa-sm text-white-50"></i>수정</a>                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var isAdd = document.getElementById("isAdd").value === "true";
+        /*[GET] station line list*/
+        const request = new XMLHttpRequest();
+        request.open('get', '/code/all_line');
+        request.onload = function () {
+            if (request.status >= 200 && request.status < 300) {
+                // the load method accepts either a string (id) or an object
+                var response = JSON.parse(request.response);
+                var code = response.status;
+                var childGroup = document.getElementById("line-child-group");
+                childGroup.innerHTML = "";
+                //<a class="dropdown-item line-child" href="#">Action</a>
+                response.data.forEach(function (e) {
+                    console.log(e);
+                    var newChild = document.createElement("a");
+                    newChild.classList.add("dropdown-item");
+                    newChild.classList.add("line-child");
+                    newChild.href="#";
+                    newChild.setAttribute("data-value",e.id)
+                    newChild.innerText=e.name;
+                    newChild.onclick = function(){
+                        var lineParent = document.getElementById("line-parent");
+                        lineParent.setAttribute("data-value",this.getAttribute("data-value"));
+                        lineParent.innerHTML = this.innerHTML;
+                        getStationList(this.getAttribute("data-value"));
+
+                        document.getElementById("station-parent").removeAttribute("data-value");
+                        document.getElementById("station-parent").innerHTML = "선택";
+                    }
+                    childGroup.append(newChild);
+                })
+
+            } else {
+                alert("정상수신실패:"+request.status);
+            }
+
+        }
+        request.send();
+
+
+        function changeLineStatus(lineStatus){
+            isNewLine = lineStatus;
+            var newLineButton = document.getElementById("new-line-button");
+            var prevLineButton = document.getElementById("prev-line-button");
+            if(isNewLine){
+                newLineButton.classList.add("btn-warning");
+                newLineButton.classList.remove("btn-outline-warning");
+                prevLineButton.classList.remove("btn-warning");
+                prevLineButton.classList.add("btn-outline-warning");
+                document.getElementById("line-select-nav").style.display = "none";
+                document.getElementById("new-line-input").style.display = "block";
+            }else{
+                newLineButton.classList.remove("btn-warning");
+                newLineButton.classList.add("btn-outline-warning");
+                prevLineButton.classList.remove("btn-outline-warning");
+                prevLineButton.classList.add("btn-warning");
+                document.getElementById("line-select-nav").style.display = "block";
+                document.getElementById("new-line-input").style.display = "none";
+            }
+
+        }
+
+
+        function getStationList(lineId){
+            /*[GET] station list*/
+            const request = new XMLHttpRequest();
+            request.open('get', '/code/stations_on_line?line_id='+lineId);
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 300) {
+                    // the load method accepts either a string (id) or an object
+                    var response = JSON.parse(request.response);
+                    var childGroup = document.getElementById("station-child-group");
+
+                    childGroup.innerHTML = "";
+                    //<a class="dropdown-item line-child" href="#">Action</a>
+                    response.data.forEach(function (e) {
+                        console.log(e);
+                        var newChild = document.createElement("a");
+                        newChild.classList.add("dropdown-item");
+                        newChild.classList.add("station-child");
+                        newChild.href="#";
+                        newChild.setAttribute("data-value",e.id)
+                        newChild.innerText=e.name;
+                        newChild.onclick = function(){
+                            var stationParent = document.getElementById("station-parent");
+                            stationParent.setAttribute("data-value",this.getAttribute("data-value"));
+                            stationParent.innerHTML = this.innerHTML;
+                        }
+                        childGroup.append(newChild);
+                    })
+
+                } else {
+                    alert("정상수신실패:"+request.status);
+                }
+
+            }
+            request.send();
+        }
+        function dataValidation(){
+
+            var lineId = document.getElementById("line-parent").getAttribute("data-value");
+            var stationId = document.getElementById("station-parent").getAttribute("data-value");
+            var shopId = document.getElementById("shopId").value;
+            var shopName = document.getElementById("shop-input").value;
+            var valiFlag = true;
+            if(!lineId){
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "호선을 먼저 선택해주세요.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                valiFlag = false;
+            }
+
+            if(!stationId){
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "지하철을 먼저 선택해주세요.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                valiFlag = false;
+            }
+
+            if(!shopId){
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "정상적인 접근이 아닙니다.",
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then((result) => {
+                    if(result.dismiss === Swal.DismissReason.timer){
+                        location.href="/settings/facility/shop";
+                    }
+                });
+                valiFlag = false;
+            }
+
+            if(!shopName){
+                Swal.fire({
+                    position: "center",
+                    icon: "error",
+                    title: "가게명을 입력해주세요.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                valiFlag = false;
+            }
+
+            return valiFlag;
+        }
+        function addShop(){
+            var stationId = document.getElementById("station-parent").getAttribute("data-value");
+            var shopId = document.getElementById("shopId").value;
+            var shopName = document.getElementById("shop-input").value;
+
+            const formData = new FormData();
+            formData.append("station_id", stationId);
+            formData.append("shop_id", shopId);
+            formData.append("shop_name", shopName);
+            if(dataValidation()){
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/facility/shop/shop_add');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        var code = response.status;
+                        console.log("저장됨")
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "저장 성공",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+                            if(result.dismiss === Swal.DismissReason.timer){
+                                location.href="/settings/facility/shop";
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "저장 실패",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+
+        }
+        function editShop(){
+            const formData = new FormData();
+            formData.append("station_id", document.getElementById("station-parent").getAttribute("data-value"));
+            formData.append("shop_id", document.getElementById("shopId").value);
+            formData.append("shop_name", document.getElementById("shop-input").value);
+
+            if(dataValidation()){
+                const request = new XMLHttpRequest();
+                request.open('post', '/settings/facility/shop/shop_edit');
+                request.onload = function () {
+                    if (request.status >= 200 && request.status < 300) {
+                        // the load method accepts either a string (id) or an object
+                        var response = JSON.parse(request.response);
+                        var code = response.status;
+                        console.log("저장됨")
+                        Swal.fire({
+                            position: "center",
+                            icon: "success",
+                            title: "저장 성공",
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then((result) => {
+                            if(result.dismiss === Swal.DismissReason.timer){
+                                location.href="/settings/facility/shop";
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "저장 실패",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+
+                }
+                request.send(formData);
+            }
+
+        }
+    </script>
+</div>
+</html>

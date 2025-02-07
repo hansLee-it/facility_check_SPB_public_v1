@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">
+		  <!-- Page Heading -->
+		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+		      <h1 class="h3 mb-0 text-gray-800">공지사항</h1>
+		  </div>	  
+		<input type="hidden" id="searchedDate" th:value="${searched_date}"/>
+		<input type="hidden" id="isDateSelected" value="0" />
+			 
+				  
+		 <div class="card shadow mb-4">
+		     <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
+		         <h6 class="m-0 font-weight-bold text-primary">공지사항 목록</h6>
+
+		     </div>
+			 <!-- Content Row -->
+			 <div class="row" style="text-align:center;">
+				 <div class="col-lg-6 col-xl-6 col-md-6">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="location.href='/notice/notice_list'" id="search-all-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow-sm" style="display: block !important;"><i
+									 class="fas fa-undo fa-sm"></i>필터 초기화</a>
+						 </div>
+					 </div>
+			 	</div>
+				 <div class="col-lg-6 col-xl-6 col-md-6">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <a onclick="showDatePicker()" id="search-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
+									 class="fas fa-calendar fa-sm text-yellow-50"></i>기간 선택</a>
+						 </div>
+					 </div>
+				 </div>
+			 </div>
+
+
+			 <!-- Content Row -->
+			 <div class="row">
+				 <div class="col-lg-12 col-xl-12 col-md-12 float-left">
+					 <div class="align-items-center justify-content-between mb-4">
+						 <div class="col mr-2">
+							 <div id="allDatePicker">
+								 <input type="text" disabled value="전체기간">
+							 </div>
+							 <div class="datepicker" id="datePicker" style="display:none;">
+								 <input type="date" class="selected-check-date" id="search-datepicker-input" />
+							 </div>
+						 </div>
+					 </div>
+				 </div>
+			 </div>
+		     <div class="card-body">
+		         <div class="table-responsive">
+		             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+		                 <thead>
+		                     <tr>
+		                         <th>번호</th>
+		                         <th>제목</th>
+		                         <th>게시기간</th>
+		                         <th>작성날짜</th>
+								 <th>작성자</th>
+		                     </tr>
+		                 </thead>
+		                 <tbody>
+		                     <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
+		                     <!--/*@thymesVar id="noticeId" type="String"*/-->
+		                     <tr th:each="notice, index : ${noticeList}" th:onclick="|location.href='@{/notice/notice_view(notice_id=${notice.noticeId})}'|">
+		                         <td th:text="${index.count}">Tiger Nixon</td>
+		                         <td th:text="${notice.title}">System Architect</td>
+		                         <td th:text="${#temporals.format(notice.fromDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(notice.toDate, 'yyyy-MM-dd')}">61</td>
+		                         <td th:text="${#temporals.format(notice.generateTime, 'yyyy-MM-dd HH:mm:ss')}">2011/04/25</td>
+								 <td th:text="${notice.writerName}">2011/04/25</td>
+		                     </tr>
+		                 </tbody>
+		             </table>
+
+					 <div style="text-align: center;">
+
+						 <a th:if="${(next_page_index*10) > 0}"  th:onClick="|indexLink(${(next_page_index - 1)*10},${next_page_index - 1})|"
+							class="custom-prev-index">이전</a>
+						 <a th:each="i : ${#numbers.sequence((next_page_index*10)+1, (next_page_index*10)+10)}" th:onClick="|indexLink(${i-1},${next_page_index})|"
+							th:if="${i <= max_page_index}" th:text="${i}" th:class="${i-1 == page_index ? 'custom-selected-index' : 'custom-index'}"></a>
+
+
+						 <a th:if="${page_index+10 < max_page_index}" th:onClick="|indexLink(${(next_page_index+1)*10},${next_page_index+1})|"
+							class="custom-next-index">다음</a>
+					 </div>
+		         </div>				 
+				 <a th:href="@{/notice/notice_write}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+				       class="fas fa-pen fa-sm text-white-50"></i>&nbsp작성</a>
+		     </div>
+		  </div>
+	  
+	     <script class="code-js">
+
+			 var searchDate = new Date();
+			 if(document.getElementById("searchedDate").value) {
+				 showDatePicker();
+				 document.getElementById("isDateSelected").value = 1;
+				 document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
+				 searchDate = new Date(document.getElementById("searchedDate").value);
+			 }
+
+			 flatpickr(document.getElementById("search-datepicker-input"),{
+				 dateFormat: "Y-m-d",
+				 defaultDate: searchDate,
+				 onChange: function(){
+					 dateChangeEvent();
+				 }
+			 });
+			 new basictable('.table',{
+				 tableWrap:false
+			 });
+
+			 function indexLink(pageIndex,nextPageIndex){
+				 let searchedDate = document.getElementById("searchedDate").value;
+				 let isDateSelected = parseInt(document.getElementById("isDateSelected").value);
+				 if(isDateSelected === 1){
+					 location.href="/notice/notice_list?page_index=" + pageIndex + "&next_page_index=" + nextPageIndex + "&search_date=" + searchedDate;
+				 }else{
+					 location.href="/notice/notice_list?page_index=" + pageIndex + "&next_page_index=" + nextPageIndex;
+				 }
+			 }
+
+			 function showDatePicker(){
+				 let datePicker = document.getElementById("datePicker");
+				 let allDateInput = document.getElementById("allDatePicker");
+				 document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
+				 document.getElementById("isDateSelected").value = 1;
+				 datePicker.style.display = "block";
+				 allDateInput.style.display = "none";
+			 }
+
+			 function dateChangeEvent(){
+				 location.href="/notice/notice_list?search_date="+document.getElementById("search-datepicker-input").value;
+			 }
+	     </script>
+
+	</div>
+</html>

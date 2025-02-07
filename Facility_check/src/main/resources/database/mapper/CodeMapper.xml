@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.CodeMapper">
+    <select id="selectLineList" resultType="hans.firefighting.check.facility_check.util.CodeDTO">
+        SELECT
+             line_id AS id
+            ,line_name AS name
+        FROM
+            station
+        GROUP BY line_id,line_name;
+    </select>
+    <select id="selectAllStationList" resultType="hans.firefighting.check.facility_check.util.CodeDTO">
+        SELECT
+            station_id AS id
+             ,station_name AS name
+        FROM
+            station
+        ORDER BY station_order ASC, station_name ASC;
+    </select>
+    <select id="selectLineStationList" resultType="hans.firefighting.check.facility_check.util.CodeDTO">
+        SELECT
+            station_id AS id
+             ,station_name AS name
+        FROM
+            station
+        WHERE
+            line_id = #{lineId}
+        ORDER BY station_order ASC, station_name ASC;
+    </select>
+    <select id="selectAllShopList" resultType="hans.firefighting.check.facility_check.util.CodeDTO">
+        SELECT
+             shop_id AS id
+            ,shop_name AS name
+        FROM
+            shop
+        ORDER BY shop_name ASC;
+    </select>
+    <select id="selectStationShopList" resultType="hans.firefighting.check.facility_check.util.CodeDTO">
+        SELECT
+            shop_id AS id
+             ,shop_name AS name
+        FROM
+            shop
+        WHERE
+            station_id = #{stationId}
+        ORDER BY shop_name ASC;
+    </select>
+</mapper>

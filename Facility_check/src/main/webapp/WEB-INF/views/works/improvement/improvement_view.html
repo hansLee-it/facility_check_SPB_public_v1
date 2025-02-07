@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+	<!-- Page Heading -->
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800">기타작업</h1>
+	</div>
+	<!-- Hided Values for Unique id and values -->
+	<!--/*@thymesVar id="notice_id" type="text"*/-->
+	<input type="text" style="display:none;" id="extraWorkId" th:value="${extra_work.extraWorkId}" readonly/>
+	<input type="text" style="display:none;" id="extraWorkStatus" th:value="${extra_work.isDone}" readonly/>
+
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">호선</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${extra_work.lineName}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">역명</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${extra_work.stationName}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">가게명</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span th:if="${extra_work.isAllShop}" class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;">전체</span>
+					<span th:unless="${extra_work.isAllShop}" class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${extra_work.shopName}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">기간</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="navbar-nav ml-auto">
+						<div class="nav-item dropdown">
+							<div class="navbar-nav ml-auto">
+								<div class="nav-item dropdown">
+									<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(extra_work.fromDate, 'yyyy-MM-dd')}"></span>
+									<span>~</span>
+									<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(extra_work.toDate, 'yyyy-MM-dd')}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">제목</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-9 col-xl-9 col-md-9 mb-9">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${extra_work.title}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<!-- Basic Card Example -->
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="h5 text-gray-800">상세내용</h6>
+						</div>
+						<div class="card-body" th:text="${extra_work.detail}">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">첨부파일
+					</h5>
+					<ul class="list-group">
+						<li th:each="file, index : ${fileList}" class="list-group-item">
+							<i class="fas fa-download fa-sm text-gray-800"></i>
+							<img th:if="${#strings.contains(file.fileType,'image')}" th:src="${file.imageSource}" th:alt="${file.fileName}" th:data-value="${file.fileId}" style="width:100px;height:100px;object-fit:cover;"/>
+							<a th:href="${'/file/filedownload/'+file.fileId}" th:text="${file.fileOriginalName + '.' + file.fileSuffix}" ></a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a th:if="${extra_work.isDone == 0}" onClick="changeWorkStatus()" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
+							class="fas fa-unlink fa-sm"></i> 미완료</a>
+					<a th:if="${extra_work.isDone == 1}" onClick="changeWorkStatus()" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm" style="display: block !important;"><i
+							class="fas fa-check-circle fa-sm"></i> 완료</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a th:onClick="|location.href='@{/works/extra_work}'|" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+							class="fas fa-list fa-sm text-white-50"></i> 목록</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<a th:onClick="|location.href='@{/works/extra_work/extra_work_edit(extraWorkId=${extra_work.extraWorkId})}'|" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;">
+						<i class="fas fa-reply fa-sm text-white-50"></i> 수정</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a onClick="deleteExtraWork()" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="display: block !important;"><i
+							class="fas fa-trash fa-sm text-white-50"></i> 삭제</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<script class="code-js">
+		function deleteExtraWork(){
+
+			const request = new XMLHttpRequest();
+			request.open('get', '/works/extra_work/extra_work_delete?extraWorkId='+document.getElementById("extraWorkId").value);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 300) {
+					// the load method accepts either a string (id) or an object
+					var response = JSON.parse(request.response);
+					var code = response.status;
+					console.log("저장됨")
+					Swal.fire({
+						position: "center",
+						icon: "success",
+						title: "삭제 성공",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.href="/works/extra_work/";
+						}
+					});
+
+				} else {
+					Swal.fire({
+						position: "center",
+						icon: "error",
+						title: "삭제 실패",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.href="/works/extra_work/";
+						}
+					});
+				}
+
+			}
+			request.send();
+		}
+
+
+		function changeWorkStatus(){
+			const request = new XMLHttpRequest();
+			request.open('get', '/works/extra_work/extra_work_status_change?extraWorkId='+document.getElementById("extraWorkId").value);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 300) {
+					// the load method accepts either a string (id) or an object
+					var response = JSON.parse(request.response);
+					var code = response.status;
+
+					Swal.fire({
+						position: "center",
+						icon: "success",
+						title: "변경 성공",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.reload();
+						}
+					});
+
+				} else {
+					Swal.fire({
+						position: "center",
+						icon: "error",
+						title: "변경 실패",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.reload();
+						}
+					});
+				}
+
+			}
+			request.send();
+		}
+	</script>
+</div>
+</html>

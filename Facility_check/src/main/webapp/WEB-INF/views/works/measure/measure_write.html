@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">	
+	<!-- Page Heading -->
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+	  <h1 class="h3 mb-0 text-gray-800">수도검침</h1>
+	</div>
+	<!-- Dummy Value -->
+	<input id="measure_id" th:value="${measure_id}" style="display:none;"/>
+	<input id="recentMeasureId" value="" style="display:none;"/>
+	<input id="recentFileId" value="" style="display:none;"/>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+						<a class="navbar-brand" href="#">호선</a>
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle station-parent-bar" href="#" id="line-parent" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									선택
+								</a>
+								<div class="dropdown-menu dropdown-menu-right animated--grow-in" id="line-child-group" aria-labelledby="navbarDropdown">
+
+								</div>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+						<a class="navbar-brand" href="#">역명</a>
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="station-parent" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									선택
+								</a>
+								<div class="dropdown-menu dropdown-menu-right animated--grow-in" id="station-child-group" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="#">호선부터 선택해주세요</a>
+								</div>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+						<a class="navbar-brand" href="#">매장</a>
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="shop-parent" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									선택
+								</a>
+								<div class="dropdown-menu dropdown-menu-right animated--grow-in" id="shop-child-group" aria-labelledby="navbarDropdown">
+									<a class="dropdown-item" href="#">역부터 선택해주세요</a>
+								</div>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6 col-xl-6 col-md-6 mb-6">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
+						<a class="navbar-brand" href="#">날짜</a>
+						<div class="navbar-nav ml-auto">
+							<div class="nav-item dropdown">
+								<div class="datepicker">
+									<input type="text" class="selected-check-date" id="datepicker-input">
+								</div>
+							</div>
+						</div>
+					</nav>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">			
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">파일첨부
+					</h5>					
+					<!-- We'll transform this input into a pond -->
+					<input type="file" class="filepond" />	
+				</div>	
+			</div>				
+	 	</div>	
+	</div>
+	 <!-- Content Row -->
+	 <div class="row">
+	   <div class="col-lg-6 col-xl-6 col-md-6 mb-6">			
+	   	<div class="align-items-center justify-content-between mb-4">
+	   		<div class="col mr-2">		
+	   		</div>
+	   	</div>	
+	   </div>			
+	   <div class="col-lg-6 col-xl-6 col-md-6 mb-6">			
+	   	<div class="align-items-center justify-content-between mb-4">
+	   		<div class="col mr-2">			
+			
+				<a href="javascript:checkIsMeasureExist()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+			       class="fas fa-save fa-sm text-white-50"></i> 저장</a>
+	   		</div>
+	   	</div>	
+	   </div>
+	</div>	
+	
+	
+	  <script class="code-js">
+		  document.addEventListener("DOMContentLoaded", function() {
+
+			  flatpickr(document.getElementById("datepicker-input"),{
+				  dateFormat: "Y-m-d",
+				  defaultDate: new Date(),
+				  onChange: function(selectedDates, dateStr, instance){
+					  checkIsMeasureExist();
+				  }
+			  });
+			  /* Date Picker END*/
+
+			  /*[GET] station line list*/
+			  const request = new XMLHttpRequest();
+			  request.open('get', '/code/all_line');
+			  request.onload = function () {
+				  if (request.status >= 200 && request.status < 300) {
+					  // the load method accepts either a string (id) or an object
+					  var response = JSON.parse(request.response);
+					  var code = response.status;
+					  var childGroup = document.getElementById("line-child-group");
+					  childGroup.innerHTML = "";
+					  //<a class="dropdown-item line-child" href="#">Action</a>
+					  response.data.forEach(function (e) {
+						  console.log(e);
+						  var newChild = document.createElement("a");
+						  newChild.classList.add("dropdown-item");
+						  newChild.classList.add("line-child");
+						  newChild.href="#";
+						  newChild.setAttribute("data-value",e.id)
+						  newChild.innerText=e.name;
+						  newChild.onclick = function(){
+							  var lineParent = document.getElementById("line-parent");
+							  lineParent.setAttribute("data-value",this.getAttribute("data-value"));
+							  lineParent.innerHTML = this.innerHTML;
+							  getStationList(this.getAttribute("data-value"));
+
+							  document.getElementById("station-parent").removeAttribute("data-value");
+							  document.getElementById("station-parent").innerHTML = "선택";
+							  document.getElementById("shop-parent").removeAttribute("data-value");
+							  document.getElementById("shop-parent").innerHTML = "선택";
+						  }
+						  childGroup.append(newChild);
+					  })
+
+				  } else {
+					  alert("정상수신실패:"+request.status);
+				  }
+
+			  }
+			  request.send();
+			  /**
+			   * ====================
+			   *      File Pond
+			   * ====================
+			   */
+			  //File Uploader (Filepond.js) set option Start
+			  FilePond.setOptions({
+				  server: {
+					  process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
+						  // fieldName is the name of the input field
+						  // file is the actual file object to send
+						  const formData = new FormData();
+						  formData.append("document_id", document.getElementById("measure_id").value);
+						  formData.append("file", file);
+						  const request = new XMLHttpRequest();
+						  request.open('POST', '/file/upload');
+
+						  // Should call the progress method to update the progress to 100% before calling load
+						  // Setting computable to false switches the loading indicator to infinite mode
+						  request.upload.onprogress = (e) => {
+							  progress(e.lengthComputable, e.loaded, e.total);
+						  };
+
+						  // Should call the load method when done and pass the returned server file id
+						  // this server file id is then used later on when reverting or restoring a file
+						  // so your server knows which file to return without exposing that info to the client
+						  request.onload = function () {
+							  if (request.status >= 200 && request.status < 300) {
+								  // the load method accepts either a string (id) or an object
+								  var response = JSON.parse(request.response);
+								  var file_id = response.data;
+								  file.id = file_id;
+								  load(request.responseText);
+							  } else {
+								  // Can call the error method if something is wrong, should exit after
+								  error('oh no');
+							  }
+						  };
+
+						  request.send(formData);
+
+						  // Should expose an abort method so the request can be cancelled
+						  return {
+							  abort: () => {
+								  // This function is entered if the user has tapped the cancel button
+								  request.abort();
+
+								  // Let FilePond know the request has been cancelled
+								  abort();
+							  },
+						  };
+					  },remove: (processResult, load, error) => {
+						  // 'source' is the path of the file and should be sent to a server endpoint via http
+
+						  console.log(processResult);
+						  console.log(processResult.split('/')[3].trim())
+						  const formData = new FormData();
+						  formData.append("document_id", document.getElementById("measure_id").value);
+						  formData.append("file_id", processResult.split('/')[3].trim());
+						  const request = new XMLHttpRequest();
+						  request.open('POST', '/file/delete');
+						  // Should call the progress method to update the progress to 100% before calling load
+						  // Setting computable to false switches the loading indicator to infinite mode
+
+						  // Should call the load method when done and pass the returned server file id
+						  // this server file id is then used later on when reverting or restoring a file
+						  // so your server knows which file to return without exposing that info to the client
+						  request.onload = function () {
+							  if (request.status >= 200 && request.status < 300) {
+								  // the load method accepts either a string (id) or an object
+								  var response = JSON.parse(request.response);
+								  alert(response.data);
+								  console.log(response);
+
+								  load(request.responseText);
+							  } else {
+								  // Can call the error method if something is wrong, should exit after
+								  error('oh no');
+							  }
+						  };
+
+						  request.send(formData);
+
+						  // Should expose an abort method so the request can be cancelled
+						  return {
+							  abort: () => {
+								  // This function is entered if the user has tapped the cancel button
+								  request.abort();
+
+								  // Let FilePond know the request has been cancelled
+								  abort();
+							  },
+						  };
+						  // call the load method before ending the function
+					  }
+				  }
+				  // 파일 올리는 즉시 업로드 끄기
+				  , instantUpload: false
+				  , allowImageExifOrientation: true
+				  , allowImagePreview: true
+				  , acceptedFileTypes: [
+					  'image/*'
+				  ]
+				  , allowProcess: false
+				  , maxParallelUploads: 10 // 한번에 올릴 수 있는 파일 개수
+				  , maxFiles: 10
+				  , maxTotalFileSize: "200MB"
+				  , allowRemove: true
+			  });
+
+		  });
+		  // Select the file input and use
+		  // create() to turn it into a pond
+		  // filepond js 만들기
+		  FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation,FilePondPluginFileValidateType);
+		  var fileUploader = FilePond.create(document.querySelector('.filepond'));
+
+
+		  function getStationList(lineId){
+			  /*[GET] station list*/
+			  const request = new XMLHttpRequest();
+			  request.open('get', '/code/stations_on_line?line_id='+lineId);
+			  request.onload = function () {
+				  if (request.status >= 200 && request.status < 300) {
+					  // the load method accepts either a string (id) or an object
+					  var response = JSON.parse(request.response);
+					  var childGroup = document.getElementById("station-child-group");
+
+					  childGroup.innerHTML = "";
+					  //<a class="dropdown-item line-child" href="#">Action</a>
+					  response.data.forEach(function (e) {
+						  console.log(e);
+						  var newChild = document.createElement("a");
+						  newChild.classList.add("dropdown-item");
+						  newChild.classList.add("station-child");
+						  newChild.href="#";
+						  newChild.setAttribute("data-value",e.id)
+						  newChild.innerText=e.name;
+						  newChild.onclick = function(){
+							  var stationParent = document.getElementById("station-parent");
+							  stationParent.setAttribute("data-value",this.getAttribute("data-value"));
+							  stationParent.innerHTML = this.innerHTML;
+							  getShopList(this.getAttribute("data-value"));
+
+
+							  document.getElementById("shop-parent").removeAttribute("data-value");
+							  document.getElementById("shop-parent").innerHTML = "선택";
+						  }
+						  childGroup.append(newChild);
+					  })
+
+				  } else {
+					  alert("정상수신실패:"+request.status);
+				  }
+
+			  }
+			  request.send();
+		  }
+		  function getShopList(stationId){
+			  /*[GET] station list*/
+			  const request = new XMLHttpRequest();
+			  request.open('get', '/code/shops_in_station?station_id='+stationId);
+			  request.onload = function () {
+				  if (request.status >= 200 && request.status < 300) {
+					  // the load method accepts either a string (id) or an object
+					  var response = JSON.parse(request.response);
+					  console.log(response);
+					  var childGroup = document.getElementById("shop-child-group");
+
+
+					  childGroup.innerHTML = "";
+					  //<a class="dropdown-item line-child" href="#">Action</a>
+					  response.data.forEach(function (e) {
+						  console.log(e);
+						  var newChild = document.createElement("a");
+						  newChild.classList.add("dropdown-item");
+						  newChild.classList.add("shop-child");
+						  newChild.href="#";
+						  newChild.setAttribute("data-value",e.id);
+						  newChild.innerText=e.name;
+						  newChild.onclick = function(){
+							  var shopParent = document.getElementById("shop-parent");
+							  shopParent.setAttribute("data-value",this.getAttribute("data-value"));
+							  shopParent.innerHTML = this.innerHTML;
+						  }
+						  childGroup.append(newChild);
+					  })
+
+				  } else {
+					  alert("정상수신실패:"+request.status);
+				  }
+
+			  }
+			  request.send();
+		  }
+
+
+		  function checkIsMeasureExist() {
+			  /*[GET] isMeasureExist*/
+			  //var isMeasureExist = false;
+			  var selectedDate = document.getElementById("datepicker-input").value;
+			  var selectedShop = document.getElementById("shop-parent").getAttribute("data-value");
+			  if (document.getElementById("datepicker-input").value) {
+				  if (document.getElementById("line-parent").getAttribute("data-value")) {
+					  if (document.getElementById("station-parent").getAttribute("data-value")) {
+						  if (document.getElementById("shop-parent").getAttribute("data-value")) {
+
+
+							  const request = new XMLHttpRequest();
+							  request.open('get', '/works/measure/is_measure_exist?shop_id=' + selectedShop + '&selected_measure_date=' + selectedDate);
+							  request.onload = function () {
+								  if (request.status >= 200 && request.status < 300) {
+									  // the load method accepts either a string (id) or an object
+									  var response = JSON.parse(request.response);
+									  console.log(response);
+									  console.log(response.data.length);
+									  if (response.data.length > 0) {
+										  Swal.fire({
+											  title: "동일한 날짜에 점검내역이 존재합니다.",
+											  icon: "error",
+											  iconHtml: "X",
+											  confirmButtonText: "확인",
+											  showCloseButton: true
+										  }).then((result) => {
+											  if(result.isConfirmed){
+												  location.reload();
+											  }
+										  });
+									  } else{
+										  fileUploader.processFiles().then(() => {
+											  sendMeasure();
+										  });
+									  }
+
+								  } else {
+									  alert("정상수신실패:" + request.status);
+								  }
+
+							  }
+							  request.send();
+						  }else errorAlert("매장을 선택해주세요.");
+					  }else errorAlert("지하철역을 선택해주세요.");
+				  }else errorAlert("호선을 선택해주세요.");
+			  }else errorAlert("날짜를 선택해주세요.");
+			  return false;
+		  }
+
+
+		  /*send Measure to Insert*/
+		  function sendMeasure() {
+			  /*[GET] addMeasure */
+			  var formData = new FormData;
+			  formData.append("shop_id",document.getElementById("shop-parent").getAttribute("data-value"));
+			  formData.append("measure_id",document.getElementById("measure_id").value);
+			  formData.append("selected_measure_date",document.getElementById("datepicker-input").value);
+
+			  const request = new XMLHttpRequest();
+			  request.open('post', '/works/measure/send_measure');
+			  request.onload = function () {
+				  if (request.status >= 200 && request.status < 300) {
+					  // the load method accepts either a string (id) or an object
+					  var response = JSON.parse(request.response);
+					  console.log(response);
+					  Swal.fire({
+						  position: "center",
+						  icon: "success",
+						  title: "저장 성공",
+						  showConfirmButton: false,
+						  timer: 1500
+					  }).then((result) => {
+						  if(result.dismiss === Swal.DismissReason.timer){
+							  location.href="/works/measure/";
+						  }
+					  });
+				  } else {
+					  Swal.fire({
+						  position: "center",
+						  icon: "error",
+						  title: "저장 실패",
+						  showConfirmButton: false,
+						  timer: 1500
+					  }).then((result) => {
+						  if(result.dismiss === Swal.DismissReason.timer){
+							  location.reload();
+						  }
+					  });
+				  }
+			  }
+			  request.send(formData);
+		  }
+
+		  function errorAlert(title){
+
+			  Swal.fire({
+				  title: title,
+				  icon: "error",
+				  iconHtml: "X",
+				  confirmButtonText: "확인",
+				  showCloseButton: true
+			  });
+		  }
+	  </script>
+	</div>
+</html>

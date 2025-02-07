@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+	<!-- Page Heading -->
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800">소방점검</h1>
+	</div>
+	<!-- Datas -->
+	<input type="text" id="facilityCheckId" th:value="${facility_check_id}" style="display:none;"/>
+	<!-- Content Row -->
+	<div class="row">
+
+		<!-- Earnings (Monthly) Card Example -->
+		<div class="col-xl-3 col-md-6 mb-4">
+			<div class="card border-left-primary shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+								호선</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${facilityCheck.lineName}">$40,000</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-calendar fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Earnings (Annual) Card Example -->
+		<div class="col-xl-3 col-md-6 mb-4">
+			<div class="card border-left-success shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+								역명</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${facilityCheck.stationName}">$215,000</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Tasks Card Example -->
+		<div class="col-xl-3 col-md-6 mb-4">
+			<div class="card border-left-info shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+								가게명
+							</div>
+
+							<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${facilityCheck.shopName}">$215,000</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Pending Requests Card Example -->
+		<div class="col-xl-3 col-md-6 mb-4">
+			<div class="card border-left-warning shadow h-100 py-2">
+				<div class="card-body">
+					<div class="row no-gutters align-items-center">
+						<div class="col mr-2">
+							<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+								날짜</div>
+							<div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${#temporals.format(facilityCheck.checkDate, 'yyyy년 MM월 dd일')}">18</div>
+						</div>
+						<div class="col-auto">
+							<i class="fas fa-comments fa-2x text-gray-300"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					소화기
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-8 col-xl-8 col-md-8 mb-8">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="text-black-50">
+						1. 소화기 종류
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-4 col-md-4 mb-4">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-3 text-left">
+					<div class="bg-success text-white p-1 d-inline-block my-1 rounded"
+						 th:if="${facilityCheck.fireExtinguisherType == 0}">
+						하론 3L
+					</div>
+					<div class="bg-success text-white p-1 d-inline-block my-1 rounded"
+						 th:if="${facilityCheck.fireExtinguisherType == 1}">
+						분말 3.3KG
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-lg-8 col-xl-8 col-md-8 mb-8">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="text-black-50">
+						2. 소화기 개수
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-4 col-md-4 mb-4">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-3 text-centertext-left">
+					<div class="bg-success text-white p-1 d-inline-block my-1 rounded"
+						 th:text="${facilityCheck.fireExtinguisherCount}+개">
+						0개
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					전기
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row" th:each="inspection, index : ${inspection_electricity}">
+		<div class="col-lg-8 col-xl-8 col-md-8 mb-8">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="text-black-50" th:text="${index.count}+'. '+${inspection.detail}">
+						1. 집기의 전기안전관리 상태는 양호한가? (차단기/SMPS/과부화등)
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-4 col-md-4 mb-4">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-3 text-left">
+					<div class="bg-warning text-white p-1 d-inline-block my-1 rounded" th:id="${inspection.inspectId}">
+						응답없음
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					소방
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row" th:each="inspection, index : ${inspection_firefighting}">
+		<div class="col-lg-8 col-xl-8 col-md-8 mb-8">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="text-black-50" th:text="${index.count}+'. '+${inspection.detail}">
+						1. 집기의 전기안전관리 상태는 양호한가? (차단기/SMPS/과부화등)
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-4 col-md-4 mb-4">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-3 text-left">
+					<div class="bg-warning text-white p-1 d-inline-block my-1 rounded" th:id="${inspection.inspectId}">
+						응답없음
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					위험요소
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content Row -->
+	<div class="row" th:each="inspection, index : ${inspection_danger}">
+		<div class="col-lg-8 col-xl-8 col-md-8 mb-8">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="text-black-50" th:text="${index.count}+'. '+${inspection.detail}">
+						1. 집기의 전기안전관리 상태는 양호한가? (차단기/SMPS/과부화등)
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4 col-xl-4 col-md-4 mb-4">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-3 text-left">
+					<div class="bg-warning text-white p-1 d-inline-block my-1 rounded" th:id="${inspection.inspectId}">
+						응답없음
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					기타
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary">메모</h6>
+						</div>
+						<div class="card-body" th:text="${facilityCheck.memo}">
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row" >
+		<div class="col-lg-12 mb-4">
+			<div class="card bg-info text-white shadow">
+				<div class="card-body">
+					파일첨부
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content Row -->
+	<div class="row" th:if="${not #sets.isEmpty(fileList)}">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<ul class="list-group">
+						<li th:each="file, index : ${fileList}" class="list-group-item">
+							<i class="fas fa-download fa-sm text-gray-800"></i>
+							<img th:if="${#strings.contains(file.fileType,'image')}" th:src="${file.imageSource}" th:alt="${file.fileName}" th:data-value="${file.fileId}" style="width:100px;height:100px;object-fit:cover;"/>
+							<a th:href="${'/file/filedownload/'+file.fileId}" th:text="${file.fileOriginalName + '.' + file.fileSuffix}" ></a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Content Row -->
+	<div class="row" th:if="${#sets.isEmpty(fileList)}">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<ul class="list-group">
+						<li class="list-group-item">
+							<span>없음</span>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a th:onClick="|location.href='@{/works/facility_check/}'|" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+							class="fas fa-list fa-sm text-white-50"></i>&nbsp목록</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<a th:onClick="|location.href='@{/works/facility_check/facility_check_edit(checkId=${facilityCheck.checkId})}'|" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;">
+						<i class="fas fa-reply fa-sm text-white-50"></i>&nbsp수정</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a onClick="" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="display: block !important;"><i
+							class="fas fa-trash fa-sm text-white-50"></i>&nbsp삭제</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script class="code-js">
+		document.addEventListener("DOMContentLoaded", function() {
+			updateRecentInspection();
+		});
+
+
+
+		function updateRecentInspection(){
+			var checkId = document.getElementById("facilityCheckId").value;
+			/*[GET] station list*/
+			const request = new XMLHttpRequest();
+			request.open('get', '/works/facility_check/shop_inpections_on_date?checkId='+checkId);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 300) {
+					// the load method accepts either a string (id) or an object
+					var response = JSON.parse(request.response);
+					console.log(response);
+					var code = response.status;
+					response.data.forEach(function(inspection){
+						var respondString = "";
+						var colorClass = "";
+						if(parseInt(inspection.response) === 0){
+							respondString = "아니오";
+							colorClass = "bg-danger";
+						}else if(parseInt(inspection.response) === 1){
+							respondString = "예";
+							colorClass = "bg-primary";
+						}else{
+							respondString = "미적용";
+							colorClass = "bg-secondary";
+						}
+						document.getElementById(inspection.inspectId).classList.remove("bg-warning");
+						document.getElementById(inspection.inspectId).classList.add(colorClass);
+						document.getElementById(inspection.inspectId).innerText = respondString;
+					});
+
+					console.log("저장됨")
+
+
+				} else {
+					alert("정상수신실패:"+request.status);
+				}
+
+			}
+			request.send();
+		}
+	</script>
+
+
+</div>
+</html>

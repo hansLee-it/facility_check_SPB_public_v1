@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.CheckScheduleMapper">
+
+    <insert id="insertCheckSchedule">
+        INSERT INTO check_schedule(
+             check_schedule_id
+            ,subject
+            ,is_even_month
+            ,is_odd_month
+            ,is_every_month
+            ,check_day
+            ,is_enable
+        ) VALUES(
+             #{checkScheduleId}
+            ,#{subject}
+            ,#{isEvenMonth}
+            ,#{isOddMonth}
+            ,#{isEveryMonth}
+            ,#{checkDay}
+            ,1
+        );
+    </insert>
+    <update id="updateCheckSchedule">
+        UPDATE check_schedule
+        SET
+             subject = #{subject}
+            ,is_even_month = #{isEvenMonth}
+            ,is_odd_month = #{isOddMonth}
+            ,is_every_month = #{isEveryMonth}
+            ,check_day = #{checkDay}
+            ,edit_time = NOW()
+        WHERE
+            check_schedule_id = #{checkScheduleId};
+    </update>
+    <select id="selectCheckSchedule" resultType="hans.firefighting.check.facility_check.settings.CheckScheduleDTO">
+        SELECT
+             check_schedule_id
+            ,subject
+            ,is_even_month
+            ,is_odd_month
+            ,is_every_month
+            ,check_day
+            ,generate_time
+            ,edit_time
+        FROM
+            check_schedule
+        WHERE
+            is_enable = true
+          AND
+            check_schedule_id = #{checkScheduleId};
+    </select>
+    <select id="selectCheckScheduleList" resultType="hans.firefighting.check.facility_check.settings.CheckScheduleDTO">
+        SELECT
+             check_schedule_id
+            ,subject
+            ,is_even_month
+            ,is_odd_month
+            ,is_every_month
+            ,check_day
+            ,generate_time
+            ,edit_time
+        FROM
+            check_schedule
+        WHERE
+            is_enable = true
+        <if test='keyword != null'>
+            AND
+                subject like CONCAT('%',#{keyword},'%')
+        </if>
+        ORDER BY generate_time DESC
+        LIMIT ${startIndex}, 10;
+    </select>
+    <select id="countTotalCheckSchedule">
+        SELECT
+            COUNT(check_schedule_id)
+        FROM
+            check_schedule
+        WHERE
+            is_enable = true
+    </select>
+    <update id="deleteCheckSchedule">
+        UPDATE check_schedule
+        SET
+             is_enable = 0
+            ,delete_time = NOW()
+        WHERE
+            check_schedule_id = #{checkScheduleId};
+    </update>
+    <select id="selectDashboardCheckScheduleList" resultType="hans.firefighting.check.facility_check.settings.CheckScheduleDTO">
+        SELECT
+             check_schedule_id
+            ,subject
+            ,is_even_month
+            ,is_odd_month
+            ,is_every_month
+            ,check_day
+            ,generate_time
+            ,edit_time
+        FROM
+            check_schedule
+        WHERE
+            is_enable = 1
+        ORDER BY is_every_month=1 DESC,is_odd_month=1 DESC,is_even_month=1 DESC,check_day
+    </select>
+</mapper>

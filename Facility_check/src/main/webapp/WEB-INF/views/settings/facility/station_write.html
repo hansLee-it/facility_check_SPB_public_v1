@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">지하철 관리</h1>
+    </div>
+    <!-- Datas -->
+    <input style="display:none;" id="line-id" th:value="${line_id}"/>
+    <input style="display:none;" id="station-id" th:value="${station_id}"/>
+    <input style="display:none;" id="isAdd" th:value="${#sets.isEmpty(station)?true:false}"/>
+<!-- NEW WRITE -->
+    <!-- Content Row -->
+    <div class="row" th:if="${#sets.isEmpty(station)}">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    추가할 지하철역
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row align-items-center" th:if="${#sets.isEmpty(station)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">호선</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4" id="line-select-parent" >
+                <nav id="line-select-nav" class="navbar navbar-expand navbar-light bg-light mb-4">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#sets.isEmpty(facilityCheck)? '선택' : facilityCheck.lineName}" th:data-value="${#sets.isEmpty(facilityCheck)? '' : facilityCheck.lineId}"
+                               id="line-parent"  value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                선택
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right animated--grow-in" id="line-child-group" aria-labelledby="navbarDropdown">
+
+                            </div>
+                        </li>
+                    </ul>
+                </nav>
+                <input style="width:100%;display:none;" id="new-line-input" class="text-lg mb-0 bg-white table-bordered rounded"/>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">지하철 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%" id="new-station-input" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row" th:if="${#sets.isEmpty(station)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="changeLineStatus(true);" id="new-line-button" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
+                            class="fas fa-pen fa-sm text-yellow-50"></i>&nbsp새 호선</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="changeLineStatus(false);" id="prev-line-button" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
+                            class="fas fa-reply fa-sm text-yellow-50"></i>&nbsp기존 호선</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="addStation()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+                            class="fas fa-save fa-sm text-white-50"></i>&nbsp저장</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--NEW WRITE END -->
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(station)}">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    선택한 지하철역
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(station)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">호선 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${station.lineName}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">지하철 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${station.stationName}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(station)}">
+        <div class="col-lg-12 mb-4">
+            <div class="card bg-info text-white shadow">
+                <div class="card-body">
+                    수정 내용
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(station)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">호선 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${station.lineName}"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <h5 class="h5 text-gray-800">지하철 명</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <input style="width:100%" id="edit-station-input" class="text-lg mb-0 bg-white table-bordered rounded" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row" th:if="${not #sets.isEmpty(station)}">
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+            <div class="align-items-center justify-content-between mb-4">
+                <div class="col mr-2">
+                    <a onclick="editStation()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+                            class="fas fa-download fa-sm text-white-50"></i>수정</a>                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var isNewLine = false; // flag for confirm this is new line or previous line
+        var isAdd = document.getElementById("isAdd").value === "true";
+        if(isAdd){
+            /*[GET] station line list*/
+            const request = new XMLHttpRequest();
+            request.open('get', '/code/all_line');
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 300) {
+                    // the load method accepts either a string (id) or an object
+                    var response = JSON.parse(request.response);
+                    var code = response.status;
+                    var childGroup = document.getElementById("line-child-group");
+                    childGroup.innerHTML = "";
+                    //<a class="dropdown-item line-child" href="#">Action</a>
+                    response.data.forEach(function (e) {
+                        console.log(e);
+                        var newChild = document.createElement("a");
+                        newChild.classList.add("dropdown-item");
+                        newChild.classList.add("line-child");
+                        newChild.href="#";
+                        newChild.setAttribute("data-value",e.id)
+                        newChild.innerText=e.name;
+                        newChild.onclick = function(){
+                            var lineParent = document.getElementById("line-parent");
+                            lineParent.setAttribute("data-value",this.getAttribute("data-value"));
+                            lineParent.innerHTML = this.innerHTML;
+
+                        }
+                        childGroup.append(newChild);
+                    })
+
+                } else {
+                    alert("정상수신실패:"+request.status);
+                }
+
+            }
+            request.send();
+        }
+
+
+        function changeLineStatus(lineStatus){
+            isNewLine = lineStatus;
+            var newLineButton = document.getElementById("new-line-button");
+            var prevLineButton = document.getElementById("prev-line-button");
+            if(isNewLine){
+                newLineButton.classList.add("btn-warning");
+                newLineButton.classList.remove("btn-outline-warning");
+                prevLineButton.classList.remove("btn-warning");
+                prevLineButton.classList.add("btn-outline-warning");
+                document.getElementById("line-select-nav").style.display = "none";
+                document.getElementById("new-line-input").style.display = "block";
+            }else{
+                newLineButton.classList.remove("btn-warning");
+                newLineButton.classList.add("btn-outline-warning");
+                prevLineButton.classList.remove("btn-outline-warning");
+                prevLineButton.classList.add("btn-warning");
+                document.getElementById("line-select-nav").style.display = "block";
+                document.getElementById("new-line-input").style.display = "none";
+            }
+
+        }
+
+        function addStation(){
+            const formData = new FormData();
+            if(isNewLine){
+                formData.append("line_id",document.getElementById("line-id").value);
+                formData.append("line_name",document.getElementById("new-line-input").value);
+            }else{
+                formData.append("line_id",document.getElementById("line-parent").getAttribute("data-value"));
+                formData.append("line_name",document.getElementById("line-parent").innerText);
+            }
+            formData.append("station_id", document.getElementById("station-id").value);
+            formData.append("station_name", document.getElementById("new-station-input").value);
+            const request = new XMLHttpRequest();
+            request.open('post', '/settings/facility/station/station_add');
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 300) {
+                    // the load method accepts either a string (id) or an object
+                    var response = JSON.parse(request.response);
+                    var code = response.status;
+                    console.log("저장됨")
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "저장 성공",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        if(result.dismiss === Swal.DismissReason.timer){
+                            location.href="/settings/facility/station";
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "저장 실패",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+
+            }
+            request.send(formData);
+        }
+        function editStation(){
+            const formData = new FormData();
+            formData.append("station_id", document.getElementById("station-id").value);
+            formData.append("station_name", document.getElementById("edit-station-input").value);
+            const request = new XMLHttpRequest();
+            request.open('post', '/settings/facility/station/station_edit');
+            request.onload = function () {
+                if (request.status >= 200 && request.status < 300) {
+                    // the load method accepts either a string (id) or an object
+                    var response = JSON.parse(request.response);
+                    var code = response.status;
+                    console.log("저장됨")
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "저장 성공",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then((result) => {
+                        if(result.dismiss === Swal.DismissReason.timer){
+                            location.href="/settings/facility/station";
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "저장 실패",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+
+            }
+            request.send(formData);
+        }
+    </script>
+</div>
+</html>

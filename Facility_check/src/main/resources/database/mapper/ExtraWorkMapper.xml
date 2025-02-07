@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.ExtraWorkMapper">
+    <select id="selectExtraWorkList" resultType="hans.firefighting.check.facility_check.works.ExtraWorkDTO">
+        SELECT
+             extra_work.extra_work_id AS extra_work_id
+            ,extra_work.from_date AS from_date
+            ,extra_work.to_date AS to_date
+            ,extra_work.title AS title
+            ,extra_work.is_all_shop AS is_all_shop
+            ,extra_work.is_done AS is_done
+            ,extra_work.writer_id AS writer_id
+            ,(SELECT
+                  user_name
+              FROM
+                  user
+              WHERE
+                  extra_work.writer_id = user.user_id
+            ) AS writer_name
+            ,extra_work.editor_id AS editor_id
+            ,(SELECT
+                  user_name
+              FROM
+                  user
+              WHERE
+                  extra_work.editor_id = user.user_id
+            ) AS editor_name
+            ,extra_work.shop_id AS shop_id
+            ,(
+            SELECT
+                sh.shop_name
+            FROM
+                shop as sh
+            WHERE
+                extra_work.shop_id = sh.shop_id
+            ) AS shop_name
+            ,extra_work.station_id AS station_id
+            ,station.station_name AS station_name
+            ,station.line_id AS line_id
+            ,station.line_name AS line_name
+            ,extra_work.generate_time AS generate_time
+            ,extra_work.edit_time AS edit_time
+            ,extra_work.delete_time AS delete_time
+        FROM
+            extra_work
+        <if test='shopId != null and !shopId.equals("")'>
+        JOIN
+            shop
+        ON
+            extra_work.shop_id = shop.shop_id
+        </if>
+        JOIN
+            station
+        ON
+            extra_work.station_id = station.station_id
+        WHERE
+            enabled = true
+        <if test='searchDate != null'>
+        AND
+            #{searchDate} BETWEEN from_date AND to_date
+        </if>
+        <if test='doneStatus != -1'>
+        AND
+            extra_work.is_done = #{doneStatus}
+        </if>
+        <if test='lineId != null and !lineId.equals("")'>
+        AND
+            station.line_id = #{lineId}
+        </if>
+        <if test='stationId != null and !stationId.equals("")'>
+        AND
+            station.station_id = #{stationId}
+        </if>
+        <if test='shopId != null and !shopId.equals("")'>
+        AND
+            extra_work.shop_id = #{shopId}
+        OR
+            extra_work.is_all_shop = true
+        </if>
+        ORDER BY generate_time DESC
+        LIMIT ${startIndex}, 10;
+    </select>
+    <select id="countTotalExtraWork">
+        SELECT
+            COUNT(extra_work_id)
+        FROM
+            extra_work
+        WHERE
+            enabled = true
+    </select>
+    <select id="countTodayExtraWork">
+        SELECT
+            COUNT(extra_work_id)
+        FROM
+            extra_work
+        WHERE
+            enabled = true
+        AND
+            CURRENT_DATE BETWEEN from_date AND to_date;
+    </select>
+    <select id="selectExtraWork" resultType="hans.firefighting.check.facility_check.works.ExtraWorkDTO">
+        SELECT
+             extra_work_id
+            ,from_date
+            ,to_date
+            ,title
+            ,detail
+            ,writer_id
+            ,(SELECT
+                  user_name
+              FROM
+                  user
+              WHERE
+                  extra_work.writer_id = user.user_id
+            ) AS writer_name
+            ,editor_id
+            ,(SELECT
+                  user_name
+              FROM
+                  user
+              WHERE
+                  extra_work.editor_id = user.user_id
+            ) AS editor_name
+            ,(SELECT
+                  line_id
+              FROM
+                  station
+              WHERE
+                  station.station_id = extra_work.station_id
+            )AS line_id
+            ,(SELECT
+                  line_name
+              FROM
+                  station
+              WHERE
+                  station.station_id = extra_work.station_id
+            )AS line_name
+            ,station_id
+            ,(SELECT
+                  station_name
+              FROM
+                  station
+              WHERE
+                  station.station_id = extra_work.station_id
+            )AS station_name
+            ,shop_id
+            ,(SELECT
+                  shop_name
+              FROM
+                  shop
+              WHERE
+                  shop.shop_id = extra_work.shop_id
+            )AS shop_name
+            ,is_all_shop
+            ,is_done
+            ,generate_time
+            ,edit_time
+            ,delete_time
+        FROM
+            extra_work
+        WHERE
+            enabled = true
+        AND
+            extra_work_id = #{extraWorkId};
+    </select>
+    <insert id="insertExtraWork">
+        INSERT INTO extra_work(
+             extra_work_id
+            ,from_date
+            ,to_date
+            ,title
+            ,detail
+            ,station_id
+            ,shop_id
+            ,is_all_shop
+            ,writer_id
+            ,editor_id
+        )VALUES(
+             #{extraWorkId}
+            ,#{fromDate}
+            ,#{toDate}
+            ,#{title}
+            ,#{detail}
+            ,#{stationId}
+            ,#{shopId}
+            ,#{isAllShop}
+            ,#{writerId}
+            ,#{editorId}
+        );
+    </insert>
+
+    <update id="updateExtraWork">
+        UPDATE
+            extra_work
+        SET
+             from_date = #{fromDate}
+            ,to_date = #{toDate}
+            ,title = #{title}
+            ,detail = #{detail}
+            ,station_id = #{stationId}
+            ,shop_id = #{shopId}
+            ,is_all_shop = #{isAllShop}
+            ,editor_id = #{editorId}
+            ,edit_time = NOW()
+        WHERE
+            extra_work_id = #{extraWorkId};
+    </update>
+
+    <delete id="deleteExtraWork">
+        DELETE FROM
+            extra_work
+        WHERE
+          extra_work_id = #{extraWorkId};
+    </delete>
+
+    <update id="updateExtraWorkStatus">
+        UPDATE
+            extra_work
+        SET
+            is_done = !is_done
+        WHERE
+            extra_work_id = #{extraWorkId};
+    </update>
+
+    <select id="selectDashboardExtraWorkList" resultType="hans.firefighting.check.facility_check.works.ExtraWorkDTO">
+        SELECT
+            extra_work_id
+             ,from_date
+             ,to_date
+             ,title
+             ,writer_id
+             ,(SELECT
+                   user_name
+               FROM
+                   user
+               WHERE
+                   extra_work.writer_id = user.user_id
+        ) AS writer_name
+             ,editor_id
+             ,(SELECT
+                   user_name
+               FROM
+                   user
+               WHERE
+                   extra_work.editor_id = user.user_id
+        ) AS editor_name
+             ,generate_time
+             ,edit_time
+             ,delete_time
+        FROM
+            extra_work
+        WHERE
+            enabled = true
+        AND
+            is_done = false
+        AND
+            CURRENT_DATE BETWEEN from_date AND to_date
+        ORDER BY from_date ASC;
+    </select>
+</mapper>

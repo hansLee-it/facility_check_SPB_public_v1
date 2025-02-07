@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.StationSettingMapper">
+
+    <select id="selectStationList" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
+        SELECT
+             line_id
+            ,line_name
+            ,station_id
+            ,station_name
+        FROM
+            station
+        ORDER BY line_name,station_name
+        LIMIT ${startIndex}, 10;
+    </select>
+    <select id="selectStation" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
+        SELECT
+             line_id
+            ,line_name
+            ,station_id
+            ,station_name
+        FROM
+            station
+        WHERE
+            station_id = #{stationId};
+    </select>
+    <select id="countTotalStation">
+        SELECT
+            COUNT(station_id)
+        FROM
+            station;
+    </select>
+    <insert id="insertStation">
+        INSERT INTO station(
+             line_id
+            ,line_name
+            ,station_id
+            ,station_name
+        )VALUES(
+             #{lineId}
+            ,#{lineName}
+            ,#{stationId}
+            ,#{stationName}
+       )
+    </insert>
+
+    <delete id="deleteStation">
+        DELETE FROM
+            station
+        WHERE
+            station_id = #{stationId}
+    </delete>
+
+    <delete id="deleteLine">
+        DELETE
+            station
+        WHERE
+            line_id = #{lineId}
+    </delete>
+
+    <update id="updateStationName">
+        UPDATE
+            station
+        SET
+            station_name = #{stationName}
+        WHERE
+            station_id = #{stationId}
+    </update>
+
+    <update id="updateLineName">
+        UPDATE
+            station
+        SET
+            line_name = #{lineName}
+        WHERE
+            line_id = #{lineId}
+    </update>
+</mapper>

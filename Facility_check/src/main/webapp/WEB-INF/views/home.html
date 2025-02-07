@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+	<div layout:fragment="content">
+	
+	
+       <!-- Page Heading -->
+       <div class="d-sm-flex align-items-center justify-content-between mb-4">
+           <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+		   <!--
+           <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                   class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+       -->
+	   </div>
+
+
+        <!-- Content Row -->
+        <div class="row">
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-4 col-md-4 col-sm-4 mb-4 text-center">
+                <button class="algolia-blue" onclick="location.href='/works/facility_check/facility_check_write'">소방 점검 작성</button>
+            </div>
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-4 col-md-4 col-sm-4 mb-4 text-center">
+                <button class="algolia-blue" onclick="location.href='/works/measure/measure_write'">수도 검침 작성</button>
+            </div>
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-4 col-md-4 col-sm-4 mb-4 text-center">
+                <button class="algolia-blue" onclick="location.href='/works/extra_work/extra_work_write'">기타 작업 작성</button>
+            </div>
+        </div>
+
+	   <!-- Color System -->
+	   <div class="row" id="alarm-row" style="display:none;">
+	      <div class="col-lg-12 mb-4">
+	          <div class="card bg-primary text-white shadow">
+	              <div class="card-body" id="alarm-text" style="text-align:center;">
+	                  Primary
+	              </div>
+	          </div>
+	      </div>
+	   </div>
+       <!-- Content Row -->
+       <div class="row">
+
+           <!-- Earnings (Monthly) Card Example -->
+           <div class="col-xl-6 col-md-12 mb-4">
+               <div class="card border-left-success shadow h-100 py-2">
+                   <div class="card-body">
+                       <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                               <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                   안전 작업</div>
+                               <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${count_today_facility_check}">$215,000</div>
+                           </div>
+                           <div class="col-auto">
+                               <i class="fas fa-check fa-2x text-gray-300"></i>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <!-- Pending Requests Card Example -->
+           <div class="col-xl-6 col-md-12 mb-4">
+               <div class="card border-left-warning shadow h-100 py-2">
+                   <div class="card-body">
+                       <div class="row no-gutters align-items-center">
+                           <div class="col mr-2">
+                               <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                   콜 작업</div>
+                               <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${count_today_extra_work}">18</div>
+                           </div>
+                           <div class="col-auto">
+                               <i class="fas fa-comments fa-2x text-gray-300"></i>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+        <!-- Content Row -->
+       <!-- DataTales Example -->
+       <div class="card shadow mb-4" th:unless="${#sets.isEmpty(notice_list)}">
+           <div class="card-header py-3">
+               <h6 class="m-0 font-weight-bold text-primary">금일 공지사항</h6>
+           </div>
+           <div class="card-body">
+               <div class="table-responsive">
+                   <table class="table table-bordered" id="noticeDataTable" width="100%" cellspacing="0">
+                       <thead>
+                       <tr class="text-center">
+                           <th>번호</th>
+                           <th>제목</th>
+                           <th>게시기간</th>
+                           <th>작성날짜</th>
+                           <th>작성자</th>
+                       </tr>
+                       </thead>
+                       <tbody class="text-center">
+                       <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
+                       <!--/*@thymesVar id="noticeId" type="String"*/-->
+                       <tr th:each="notice, index : ${notice_list}" th:onclick="|location.href='@{/notice/notice_view(notice_id=${notice.noticeId})}'|">
+                           <td th:text="${index.count}">Tiger Nixon</td>
+                           <td th:text="${notice.title}" class="text-left">System Architect</td>
+                           <td th:text="${#temporals.format(notice.fromDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(notice.toDate, 'yyyy-MM-dd')}">61</td>
+                           <td th:text="${#temporals.format(notice.generateTime, 'yyyy-MM-dd HH:mm:ss')}">2011/04/25</td>
+                           <td th:text="${notice.writerName}">2011/04/25</td>
+                       </tr>
+                       </tbody>
+                   </table>
+               </div>
+           </div>
+       </div>
+
+        <!-- Content Row -->
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4" th:unless="${#sets.isEmpty(extra_work_list)}">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">금일 기타작업</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="extraWorkDataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr class="text-center">
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>게시기간</th>
+                            <th>작성날짜</th>
+                            <th>작성자</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
+                        <!--/*@thymesVar id="noticeId" type="String"*/-->
+                        <tr th:each="extraWork, index : ${extra_work_list}" th:onclick="|location.href='@{/works/extra_work/extra_work_view(extraWorkId=${extraWork.extraWorkId})}'|">
+                            <td th:text="${index.count}"></td>
+                            <td th:text="${extraWork.title}" class="text-left">System Architect</td>
+                            <td th:text="${#temporals.format(extraWork.fromDate, 'yyyy-MM-dd')}">2011/04/25</td>
+                            <td th:text="${#temporals.format(extraWork.toDate, 'yyyy-MM-dd')}">2011/04/25</td>
+                            <td th:text="${extraWork.editorName}">2011/04/25</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Content Row -->
+        <div class="row" th:unless="${#sets.isEmpty(check_schedule_list)}">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-12 col-md-12 mb-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">수도 검침 일정</h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Check Schedule Card Views-->
+
+                        <div class="row">
+
+                            <!-- Earnings (Monthly) Card Example -->
+                            <th:block th:each="schedule, index : ${check_schedule_list}">
+                                <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 mb-4">
+                                    <div th:if="${schedule.isEveryMonth}" class="card shadow mb-4">
+                                        <div class="card-header bg-gradient-primary py-3">
+                                            <h5 th:if="${schedule.isEveryMonth}" th:text="${'매 달 '}" class="m-0 font-weight-bolder text-center text-gray-100">매 달 5일</h5>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h3 class="font-weight-lighter" th:utext="${schedule.checkDay + '일'}" th:classappend="${schedule.isToday?'today-check-day':''}">점검명--테스트역</h3>
+                                            <br>
+                                            <span class="font-weight-light" th:utext="${schedule.subject}">점검명--테스트역</span>
+                                        </div>
+                                    </div>
+                                    <div th:if="${schedule.isOddMonth}" class="card shadow mb-4">
+                                        <div class="card-header bg-gradient-info py-3">
+                                            <h5 th:if="${schedule.isOddMonth}" th:utext="${'홀수 달'}" class="m-0 font-weight-bolder text-center text-gray-100">홀수 달 5일</h5>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h3 class="font-weight-lighter" th:utext="${schedule.checkDay + '일'}" th:classappend="${schedule.isToday?'today-check-day':''}">점검명--테스트역</h3>
+                                            <br>
+                                            <span class="font-weight-light" th:utext="${schedule.subject}">점검명--테스트역</span>
+                                        </div>
+                                    </div>
+                                    <div th:if="${schedule.isEvenMonth}" class="card shadow mb-4">
+                                        <div class="card-header bg-gradient-success py-3">
+                                            <h5 th:if="${schedule.isEvenMonth}" th:utext="${'짝수 달 '}" class="m-0 font-weight-bolder text-center text-gray-100">짝수 달 5일</h5>
+                                        </div>
+                                        <div class="card-body text-center">
+                                            <h3 class="font-weight-lighter" th:utext="${schedule.checkDay + '일'}" th:classappend="${schedule.isToday?'today-check-day':''}">점검명--테스트역</h3>
+                                            <br>
+                                            <span class="font-weight-light" th:utext="${schedule.subject}">점검명--테스트역</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            new basictable('.noticeDataTable');
+            new basictable('.extraWorkDataTable');
+        </script>
+	</div>
+</html>
