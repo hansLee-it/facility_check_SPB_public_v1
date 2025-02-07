@@ -16,16 +16,16 @@ VIEW
 - CSS
 - Vanilla Javascript
 
-##External Sources
+## External Sources
 
 Javascript
-- basictable
-- SB Admin 2
-- filepond
-- flatpickr
-- Sweet Alert 2
-- Toast UI
+- [basictable](https://github.com/jerrylow/basictable.git)
+- [SB Admin 2](https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git)
+- [filepond](https://pqina.nl/filepond/)
+- [flatpickr](https://flatpickr.js.org/)
+- [Sweet Alert 2](https://sweetalert2.github.io/)
+- [Toast UI](https://ui.toast.com/)
 
 Fonts
-- Nanum Square Round
+- [Nanum Square Round](https://hangeul.naver.com/font)
 
