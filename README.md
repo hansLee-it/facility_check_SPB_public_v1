@@ -3,13 +3,13 @@
 This project has been commissioned at the request of a colleague employed by the Korean Metro system in the capacity of a metro facility inspector.
 
 ## Log
----
+
 - Present : Working on requested functions.
 - Feb 3, 2025 : Custom inspection plan has developed and public project is uploaded
 - Jan 13, 2025 : Some Adjustment is requested
 - Jun 8, 2024 : Deployed Web application
-- Apr 3, 2024 : Web Developmet started 
----
+- Apr 3, 2024 : Web Developmet started
+  
 ## Specification
 Core
 - Spring Boot 3.2.5
