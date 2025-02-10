@@ -103,7 +103,7 @@ public class MeasureController{
 		}
 
 
-		LOGGER.info("View >>>  Station Setting List");
+		LOGGER.info("View >>>  Measure List");
 
 
 		//turn out empty parameter's are injected into "null" String object

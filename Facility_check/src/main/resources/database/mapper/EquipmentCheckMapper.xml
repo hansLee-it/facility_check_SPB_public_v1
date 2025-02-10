@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.EquipmentCheckMapper">
+    <select id="selectEquipmentCheckList" resultType="hans.firefighting.check.facility_check.works.EquipmentCheckDTO">
+        SELECT
+             equipment_check.equipment_check_id AS equipment_check_id
+            ,equipment_check.shop_id AS shop_id
+            ,equipment_check.title AS title
+            ,equipment_check.memo AS memo
+            ,equipment_check.check_date AS check_date
+            ,equipment_check.writer_id AS writer_id
+            ,equipment_check.editor_id AS editor_id
+            ,equipment_check.generate_time AS generate_time
+            ,shop.shop_name AS shop_name
+            ,shop.station_id AS station_id
+            ,station.station_name AS station_name
+            ,station.line_id AS line_id
+            ,station.line_name AS line_name
+        FROM
+            equipment_check
+        JOIN
+            shop
+        ON
+            equipment_check.shop_id = shop.shop_id
+        JOIN
+            station
+        ON
+            shop.station_id = station.station_id
+        WHERE
+            equipment_check.is_enable = true
+        <if test='searchDate != null'>
+            AND
+            #{searchDate} = equipment_check.check_date
+        </if>
+        <if test='lineId != null and !lineId.equals("")'>
+            AND
+            station.line_id = #{lineId}
+        </if>
+        <if test='stationId != null and !stationId.equals("")'>
+            AND
+            station.station_id = #{stationId}
+        </if>
+        <if test='shopId != null and !shopId.equals("")'>
+            AND
+            equipment_check.shop_id = #{shopId}
+        </if>
+        ORDER BY generate_time DESC
+        LIMIT ${startIndex}, 9;
+    </select>
+    <select id="countTotalEquipmentCheck">
+        SELECT
+            COUNT(equipment_check_id)
+        FROM
+            equipment_check
+        WHERE
+            is_enable = true;
+    </select>
+    <select id="selectEquipmentCheck" resultType="hans.firefighting.check.facility_check.works.EquipmentCheckDTO">
+    SELECT
+         equipment_check.equipment_check_id AS equipment_check_id
+        ,equipment_check.shop_id AS shop_id
+        ,equipment_check.title AS title
+        ,equipment_check.memo AS memo
+        ,equipment_check.check_date AS check_date
+        ,equipment_check.writer_id AS writer_id
+        ,equipment_check.editor_id AS editor_id
+        ,equipment_check.generate_time AS generate_time
+        ,shop.shop_name AS shop_name
+        ,shop.station_id AS station_id
+        ,station.station_name AS station_name
+        ,station.line_id AS line_id
+        ,station.line_name AS line_name
+    FROM
+        equipment_check
+    JOIN
+        shop
+    ON
+        equipment_check.shop_id = shop.shop_id
+    JOIN
+        station
+    ON
+        shop.station_id = station.station_id
+    WHERE
+        equipment_check.equipment_check_id = #{equipmentCheckId}
+</select>
+    <select id="countTotalEquipmentCheck">
+        SELECT
+            COUNT(equipment_check_id)
+        FROM
+            equipment_check
+        WHERE
+            is_enable = true;
+    </select>
+    <insert id="insertEquipmentCheck">
+        INSERT INTO
+        equipment_check(
+             equipmentCheck_id
+            ,shop_id
+            ,title
+            ,memo
+            ,check_date
+            ,writer_id
+            ,editor_id
+        )
+        VALUES(
+             #{equipmentCheckId}
+            ,#{shopId}
+            ,#{title}
+            ,#{memo}
+            ,#{checkDate}
+            ,#{writerId}
+            ,#{editorId}
+        )
+    </insert>
+
+    <update id="updateEquipmentCheck">
+        UPDATE
+            equipment_check
+        set
+             shop_id = #{shopId}
+            ,title = #{title}
+            ,memo = #{memo}
+            ,check_date = #{checkDate}
+            ,editor_id = #{editorId}
+            ,edit_time = NOW()
+        WHERE
+            equipment_check_id = #{equipmentCheckId};
+    </update>
+    <update id="deleteEquipmentCheck">
+        UPDATE
+            equipment_check
+        set
+            is_enable = 0
+        WHERE
+            equipment_check_id = #{equipmentCheckId};
+    </update>
+</mapper>

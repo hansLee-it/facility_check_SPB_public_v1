@@ -286,7 +286,7 @@
 					<ul class="list-group">
 						<li th:each="file, index : ${fileList}" class="list-group-item">
 							<i class="fas fa-download fa-sm text-gray-800"></i>
-							<img th:if="${#strings.contains(file.fileType,'image')}" th:src="${file.imageSource}" th:alt="${file.fileName}" th:data-value="${file.fileId}" style="width:100px;height:100px;object-fit:cover;"/>
+							<img onclick="showImagePopup(this);" th:name="${file.fileOriginalName}" th:if="${#strings.contains(file.fileType,'image')}" th:src="${file.imageSource}" th:alt="${file.fileName}" th:data-value="${file.fileId}" style="width:100px;height:100px;object-fit:cover;border-radius: 10%;"/>
 							<a th:href="${'/file/filedownload/'+file.fileId}" th:text="${file.fileOriginalName + '.' + file.fileSuffix}" ></a>
 						</li>
 
@@ -348,11 +348,25 @@
 
 	</div>
 	<script class="code-js">
+
 		document.addEventListener("DOMContentLoaded", function() {
 			updateRecentInspection();
 		});
 
 
+		function showImagePopup(element){
+			Swal.fire({
+				imageUrl: element.getAttribute("src"),
+				imageAlt: element.getAttribute("alt"),
+				closeButtonHtml: "<span style='padding-bottom: 35%'>&times;</span>",
+				widthAuto: true,
+				heightAuto: true,
+				showCloseButton: true,
+				showConfirmButton: false,
+				showDenyButton: false,
+				showCancelButton: false
+			});
+		}
 
 		function updateRecentInspection(){
 			var checkId = document.getElementById("facilityCheckId").value;

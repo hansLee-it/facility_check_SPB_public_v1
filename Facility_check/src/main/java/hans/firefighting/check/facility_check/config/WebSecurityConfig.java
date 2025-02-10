@@ -35,6 +35,10 @@ public class WebSecurityConfig {
 				.requestMatchers("/error").permitAll()
 				.anyRequest().authenticated()
 			)
+			.rememberMe(httpSecurityRememberMeConfigurer -> httpSecurityRememberMeConfigurer
+					.rememberMeParameter("remember-me")
+					.tokenValiditySeconds(60*60*24*7*4)
+			)
 			.formLogin((form) -> form
 				.usernameParameter("username")
 				.passwordParameter("password")
@@ -47,6 +51,8 @@ public class WebSecurityConfig {
 			        .logoutUrl("/logout")
 					.logoutSuccessHandler(getLogoutSuccessHandler())
 			        .logoutSuccessUrl("/login")
+					.deleteCookies("JSESSIONID")
+					.deleteCookies("loginCookie")
 			        .permitAll()
 			        .invalidateHttpSession(true));
 		http

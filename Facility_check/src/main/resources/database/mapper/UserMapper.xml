@@ -59,6 +59,8 @@
             ,user_id
             ,user_name
             ,phone_number
+            ,session_id
+            ,last_login_time
             ,generate_time
             ,edit_time
         FROM
@@ -125,6 +127,15 @@
             ,phone_number = #{phoneNumber}
         WHERE
             user_uid = #{userUid}
+    </update>
+    <update id="insertUserLoginActivity">
+        UPDATE
+            user
+        SET
+            session_id = #{sessionId}
+          ,last_login_time = #{loginTime}
+        WHERE
+            user_id = #{userId}
     </update>
     <delete id="deleteUser">
         DELETE FROM

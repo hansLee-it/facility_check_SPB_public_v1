@@ -174,11 +174,9 @@ public class AccountSettingController {
             throws IOException, ParseException {
         LOGGER.info("Proc >>>  Change User's Password");
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-
         UserDTO user = new UserDTO();
         user.setUserUid(userUid);
-        user.setUserPassword(encoder.encode(newPassword));
+        user.setUserPassword(newPassword);
 
         int resultValue = userService.updateUserPassword(user);
 
@@ -221,12 +219,12 @@ public class AccountSettingController {
                                                                     @RequestParam(value = "userPhoneNumber", required = true) String userPhoneNumber)
             throws IOException {
         LOGGER.info("Proc >>> Account Add");
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
         UserDTO user = new UserDTO();
         user.setUserUid(userUid);
         user.setUserId(userId);
         user.setUserName(userName);
-        user.setUserPassword(encoder.encode(userPassword));
+        user.setUserPassword(userPassword);
         user.setPhoneNumber(userPhoneNumber);
 
         int resultValue = userService.insertUser(user);

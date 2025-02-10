@@ -354,3 +354,43 @@ a:hover{
     opacity: 90%;
     z-index: 0;
 }
+.search-btn{
+    padding: .375rem .75rem;
+    pointer-events: none;
+}
+.disable-input-design{
+    outline:none;
+    border: 0;
+    padding-left: 10px;
+}
+.search-label{
+    text-align: center;
+    border-radius: .35rem;
+    background: rgba(0, 0, 0, .15);
+    display: inline-flex;
+    padding: .375rem .75rem;
+    font-weight:400;
+    align-items:stretch;
+    overflow: hidden;
+    justify-content: center;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+.search-button{
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    display: inline-flex;
+    padding: .375rem .75rem;
+    font-weight:400;
+    align-items:stretch;
+    overflow: hidden;
+    justify-content: center;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.long-text-to-short{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}

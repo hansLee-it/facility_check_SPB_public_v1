@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/works/equipment")
-public class EquipmentController {
+public class ImprovementController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(EquipmentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImprovementController.class);
 
     /**
      * <pre>

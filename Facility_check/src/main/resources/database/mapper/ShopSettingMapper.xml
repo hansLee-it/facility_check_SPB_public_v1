@@ -15,6 +15,8 @@
             station
         ON
             shop.station_id = station.station_id
+        WHERE
+            is_enable = 1
         ORDER BY station.line_name,station.station_name,shop.shop_name
         LIMIT ${startIndex}, 10;
     </select>
@@ -33,13 +35,17 @@
         ON
             shop.station_id = station.station_id
         WHERE
-            shop.shop_id = #{shopId};
+            shop.shop_id = #{shopId}
+        AND
+            is_enable = 1;
     </select>
     <select id="countTotalShop">
         SELECT
             COUNT(shop_id)
         FROM
             shop
+        WHERE
+            is_enable = 1
     </select>
     <insert id="insertShop">
         INSERT INTO shop(
@@ -72,12 +78,14 @@
             shop_id = #{shopId}
     </update>
 
-    <delete id="deleteShop">
-        DELETE FROM
+    <update id="deleteShop">
+        UPDATE
             shop
+        SET
+            is_enable = 0
         WHERE
             shop_id = #{shopId}
-    </delete>
+    </update>
 
     <select id="selectAllNames" resultType="hans.firefighting.check.facility_check.settings.StationShopDTO">
         SELECT

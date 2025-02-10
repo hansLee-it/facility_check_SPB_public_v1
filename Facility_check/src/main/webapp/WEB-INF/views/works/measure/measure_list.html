@@ -110,8 +110,8 @@
 			 </div>
 		     <div class="card-body">
 				 <div class="custom-measure-container">
-					 <div th:each="measure,index : ${measure_list}" class="img-profile custom-measure-box" th:data-value="${measure.measureId}" th:onclick="showImagePopup(this,[[${measure.shopName}]] , [[${#temporals.format(measure.measureDate, 'yyyy-MM-dd')}]])">
-						 <img th:src="${measure.file.imageSource}" th:alt="${measure.file.fileOriginalName}" th:data-value="${measure.fileId}" class="custom-measure-img"/>
+					 <div th:each="measure,index : ${measure_list}" class="img-profile custom-measure-box" th:data-value="${measure.measureId}" th:onclick="showImagePopup(this,[[${'[' + measure.lineName + ' - ' + measure.stationName + ']<br>' + measure.shopName}]] , [[${#temporals.format(measure.measureDate, 'yyyy-MM-dd')}]])">
+						 <img style="border-radius: 10%;" th:src="${measure.file.imageSource}" th:alt="${measure.file.fileOriginalName}" th:data-value="${measure.fileId}" class="custom-measure-img"/>
 						 <div class="custom-measure-texts">
 							 <span th:text="${measure.shopName}" class="custom-measure-shop"/>
 							 <br><br>
@@ -145,7 +145,7 @@
 				showDatePicker()
 				document.getElementById("isDateSelected").value = 1;
 				document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
-				searchDate = new Date(document.getElementById("searchedDate").value);
+				searchDate = new Date(document.getElementById("searchedDate").value + " 00:00:01");
 			}
 
 			flatpickr(document.getElementById("search-datepicker-input"),{
@@ -188,10 +188,10 @@
 				var fileName = imgChild.getAttribute("alt");
 				Swal.fire({
 					title: measureDate,
-					text: shopName,
+					html: shopName,
 					imageUrl: imgSrc,
 					imageAlt: fileName,
-					width: '400px',
+					width: "400px",
 					heightAuto: false,
 					showConfirmButton: true,
 					confirmButtonText: '다운로드',

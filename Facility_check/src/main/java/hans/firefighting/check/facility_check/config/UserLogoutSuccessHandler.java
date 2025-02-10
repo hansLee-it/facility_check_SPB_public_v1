@@ -5,6 +5,7 @@ import hans.firefighting.check.facility_check.settings.UserLogService;
 import hans.firefighting.check.facility_check.user.UserService;
 import hans.firefighting.check.facility_check.util.RequestUtils;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 
@@ -34,14 +36,12 @@ public class UserLogoutSuccessHandler extends SimpleUrlLogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         Object principal = authentication.getPrincipal();
         UserDetails userDetails = (UserDetails) principal;
-/*
         String requestPage = "logout";
         String requestType = "expire";
         int result = 1;
 
-        String userId = request.getParameter("username");
+        String userId = userDetails.getUsername();
         userLogService.insertUserLog(request,userId,requestPage,requestType,"",result);
-*/
         super.onLogoutSuccess(request, response, authentication);
     }
 

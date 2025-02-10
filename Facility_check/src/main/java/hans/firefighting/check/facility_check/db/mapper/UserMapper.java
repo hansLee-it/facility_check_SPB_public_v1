@@ -5,6 +5,7 @@ import hans.firefighting.check.facility_check.user.UserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -20,6 +21,7 @@ public interface UserMapper {
     public Integer updateUserInfo(UserDTO user);
     public Integer insertUser(UserDTO user);
     public Integer insertUserRole(String userUid);
+    public Integer insertUserLoginActivity(String userId, String sessionId, LocalDateTime loginTime);
     public List<String> selectUserRoles(String userUid);
     public Integer deleteUser(String userUid);
 }

@@ -2,6 +2,7 @@ package hans.firefighting.check.facility_check.user;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDateTime;
 
@@ -17,8 +18,26 @@ public class UserDTO {
 	private String phoneNumber;
 	private int tryCount;
 	private boolean userLock;
+	private String sessionId;
+	private LocalDateTime lastLoginTime;
 	private LocalDateTime generateTime;
 	private LocalDateTime editTime;
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
+	public LocalDateTime getLastLoginTime() {
+		return lastLoginTime;
+	}
+
+	public void setLastLoginTime(LocalDateTime lastLoginTime) {
+		this.lastLoginTime = lastLoginTime;
+	}
 
 	public int getTryCount() {
 		return tryCount;

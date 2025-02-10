@@ -74,6 +74,7 @@ public class CheckScheduleController {
         modelAndView.addObject("page_index", pageIndex);
         modelAndView.addObject("next_page_index", nextPageIndex);
         modelAndView.addObject("max_page_index", max_page_index);
+        modelAndView.addObject("keyword", keyword);
         modelAndView.addObject("check_schedule_list", checkScheduleService.selectCheckScheduleList(pageIndex,keyword));
         modelAndView.setViewName("settings/check_schedule/check_schedule_list");
         return modelAndView;

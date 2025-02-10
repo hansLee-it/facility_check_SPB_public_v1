@@ -195,7 +195,7 @@
 				 showDatePicker();
 				 document.getElementById("search-date").classList.replace("btn-outline-warning","btn-warning");
 				 document.getElementById("isDateSelected").value = 1;
-				 searchDate = new Date(document.getElementById("searchedDate").value);
+				 searchDate = new Date(document.getElementById("searchedDate").value + " 00:00:01");
 			 }
 
 			 flatpickr(document.getElementById("search-datepicker-input"),{

@@ -1,5 +1,9 @@
 package hans.firefighting.check.facility_check;
 
+import hans.firefighting.check.facility_check.user.UserDTO;
+import hans.firefighting.check.facility_check.user.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.util.WebUtils;
+
+import java.time.LocalDateTime;
 
 /**
  * <pre>
@@ -27,8 +34,8 @@ public class LoginController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 	
-	//@Autowired
-	//private UserService userService;
+	@Autowired
+	private UserService userService;
 
 	@GetMapping({ "/login" })
 	public String login(HttpServletRequest request, @RequestParam(value = "error", required = false) String error,
@@ -37,8 +44,9 @@ public class LoginController {
 		//RzUser user = userService.getUserDetails(request);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		LOGGER.info("login >> is Logged in : {}", auth.getName());
+		Cookie rememberMeCookie = WebUtils.getCookie(request, "remember-me");
 		// 세션이 유지 될경우 뒤로가기 눌러도 로그인 화면에 안가도록 유지
-		if (auth.getName().equals("user")) {
+		if (auth.getName().equals("user") || rememberMeCookie != null) {
 			LOGGER.info("login >> user: {}", auth.getDetails().toString());
 			return "redirect:/home";
 		}
