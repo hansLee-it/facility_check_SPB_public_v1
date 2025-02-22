@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{fragments/default_layout}">
+<div layout:fragment="content">
+	<!-- Page Heading -->
+	<div class="d-sm-flex align-items-center justify-content-between mb-4">
+		<h1 class="h3 mb-0 text-gray-800">조치 요청</h1>
+	</div>
+	<!-- Hided Values for Unique id and values -->
+	<!--/*@thymesVar id="notice_id" type="text"*/-->
+	<input type="text" style="display:none;" id="issueId" th:value="${issue.issueId}" readonly/>
+
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">호선</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${issue.lineName}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">역 명</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${issue.stationName}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">가게 명</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" style="width:100%;" th:text="${issue.shopName}"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<h5 class="h5 text-gray-800">요청 날짜</h5>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="navbar-nav ml-auto">
+						<div class="nav-item dropdown">
+							<div class="navbar-nav ml-auto">
+								<div class="nav-item dropdown">
+									<span class="text-lg mb-0 bg-white table-bordered p-2 rounded" th:text="${#temporals.format(issue.issueDate, 'yyyy-MM-dd')}"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<!-- Basic Card Example -->
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="h5 text-gray-800">요청 사항</h6>
+						</div>
+						<div class="card m-3 py-3 " style="border:1px solid #e3e6f0;border-radius: 0;">
+							<div class="card-body" th:text="${issue.detail}">
+							</div>
+						</div>
+
+						<div th:unless="${#sets.isEmpty(issueFileList)}" class="card py-3 m-3" style="border:1px solid #e3e6f0;border-radius: 0;">
+							<div class="card-body align-content-center text-center">
+								<th:block th:each="file, index : ${issueFileList}">
+									<img onclick="showImagePopup(this);" th:name="${file.fileOriginalName}" th:if="${#strings.contains(file.fileType,'image')}" th:src="${file.imageSource}" th:alt="${file.fileName}" th:data-value="${file.fileId}" style="width:200px;height:200px;margin:1rem;object-fit:cover;border-radius: 10%;"/>
+								</th:block>
+							</div>
+						</div>
+
+							<a th:onclick="|location.href='@{/works/issue/issue_view/improve_write(issue_id=${issue.issueId})}'|" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm m-3" style="display: block !important;"><i
+									class="fas fa-pen fa-sm text-white-50"></i>&nbsp조치 등록</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Content Row -->
+	<div class="row">
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<a th:onClick="|location.href='@{/works/issue}'|" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+							class="fas fa-list fa-sm text-white-50"></i>&nbsp 목록</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4 d-sm-none d-none d-md-none">
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<a th:onClick="|location.href='@{/works/issue/issue_edit(issue_id=${issue.issueId})}'|" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;">
+						<i class="fas fa-reply fa-sm text-white-50"></i>&nbsp요청 수정</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xl-3 col-md-3 mb-3">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+
+					<a onClick="deleteIssue()" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="display: block !important;"><i
+							class="fas fa-trash fa-sm text-white-50"></i>&nbsp요청 삭제</a>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Content Row -->
+	<div class="row" th:each="improve, index : ${improve_list}">
+		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
+			<div class="align-items-center justify-content-between mb-4">
+				<div class="col mr-2">
+					<div class="card shadow mb-4">
+
+						<!-- Card Header - Accordion -->
+						<a href="#collapseCardExample" class="d-block card-header py-3 collapsed"
+						   data-toggle="collapse" role="button" aria-expanded="true" aria-controls="collapseCardExample"
+						   th:data-value="${improve.improveId}"
+						   onclick="getImproveFiles(this);">
+							<div class="m-0 font-weight-bold text-primary" th:text="${index.count + '차 조치'}">n차 조치</div>
+							<div th:text="${'| 조치 날짜 : '+#temporals.format(improve.improveDate, 'yyyy-MM-dd')+' | 조치자 : '+improve.editorName+' |'}">
+								| 조치 날짜 | 조치자 |
+							</div>
+
+						</a>
+						<!-- Card Content - Collapse -->
+						<div class="collapse" id="collapseCardExample" style="">
+							<div class="card-body">
+
+								<div class="card mb-4 py-3 " style="border:1px solid #e3e6f0;border-radius: 0;">
+									<div class="card-body" th:text="${improve.detail}">
+										조치내용 들어갈 공간
+									</div>
+								</div>
+
+								<div class="card mb-4 py-3" th:id="${'img_box_'+improve.improveId}" style="border:1px solid #e3e6f0;border-radius: 0;">
+									<div class="card-body align-content-center text-center" th:id="${'img_section_'+improve.improveId}">
+									</div>
+								</div>
+							</div>
+
+							<!-- Content Row -->
+							<div class="row">
+								<div class="col-lg-6 col-xl-6 col-md-6 col-sm-auto">
+									<div class="align-items-center justify-content-between mb-4">
+										<div class="col mr-2">
+											<a th:onClick="|location.href='@{/works/issue/issue_view/improve_edit(improve_id=${improve.improveId})}'|" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;">
+												<i class="fas fa-reply fa-sm text-white-50"></i>&nbsp조치 수정</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 col-xl-6 col-md-6 col-sm-auto">
+									<div class="align-items-center justify-content-between mb-4">
+										<div class="col mr-2">
+
+											<a onClick="deleteImprove(this)" th:data-value="${improve.improveId}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm" style="display: block !important;"><i
+													class="fas fa-trash fa-sm text-white-50"></i>&nbsp조치 삭제</a>
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script class="code-js">
+
+		function showImagePopup(element) {
+			Swal.fire({
+				imageUrl: element.getAttribute("src"),
+				imageAlt: element.getAttribute("alt"),
+				//width: "400px",
+				heightAuto: true,
+				showCloseButton: false,
+				showConfirmButton: true,
+				confirmButtonText: '다운로드',
+				showDenyButton: false,
+				showCancelButton: true,
+				cancelButtonText: '닫기'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					location.href = "/file/filedownload/" + element.getAttribute("data-value");
+				}
+			});
+		}
+		function deleteIssue(){
+			const request = new XMLHttpRequest();
+			request.open('post', '/works/issue/issue_delete?issue_id='+document.getElementById("issueId").value);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 300) {
+					// the load method accepts either a string (id) or an object
+					var response = JSON.parse(request.response);
+					var code = response.status;
+					Swal.fire({
+						position: "center",
+						icon: "success",
+						title: "삭제 성공",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.href="/works/issue/";
+						}
+					});
+
+				} else {
+					Swal.fire({
+						position: "center",
+						icon: "error",
+						title: "삭제 실패",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.href="/works/issue/";
+						}
+					});
+				}
+
+			}
+			request.send();
+		}
+
+		function deleteImprove(element){
+			var improveId = element.getAttribute("data-value");
+			const request = new XMLHttpRequest();
+			request.open('post', '/works/issue/issue_view/improve_delete?improve_id='+improveId);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 300) {
+					// the load method accepts either a string (id) or an object
+					var response = JSON.parse(request.response);
+					var code = response.status;
+					Swal.fire({
+						position: "center",
+						icon: "success",
+						title: "삭제 성공",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.reload();
+						}
+					});
+
+				} else {
+					Swal.fire({
+						position: "center",
+						icon: "error",
+						title: "삭제 실패",
+						showConfirmButton: false,
+						timer: 1500
+					}).then((result) => {
+						if(result.dismiss === Swal.DismissReason.timer){
+							location.reload();
+						}
+					});
+				}
+
+			}
+			request.send();
+		}
+		function getImproveFiles(e){
+			var documentId = e.getAttribute("data-value");
+			var imgBox = document.getElementById("img_box_"+documentId);
+			var imgSection = document.getElementById("img_section_"+documentId);
+			console.log(documentId);
+			if(!imgSection.innerHTML.trim()){
+				const request = new XMLHttpRequest();
+				request.open('get', '/file/selectDocumentFiles?documentId='+documentId);
+				request.onload = function () {
+					if (request.status >= 200 && request.status < 300) {
+						// the load method accepts either a string (id) or an object
+						var response = JSON.parse(request.response);
+						var code = response.status;
+
+						console.log(response);
+						if(response.data.length == 0){
+							imgBox.setAttribute("style","display:none;");
+						}else{
+							imgBox.setAttribute("style","border:1px solid #e3e6f0;border-radius: 0;");
+							response.data.forEach((e)=>{
+								var newChild = document.createElement("img");
+								newChild.setAttribute("onclick","showImagePopup(this);");
+								newChild.setAttribute("name",e.fileOriginalName);
+								newChild.setAttribute("src",e.imageSource);
+								newChild.setAttribute("alt",e.fileName);
+								newChild.setAttribute("data-value",e.fileId);
+								newChild.setAttribute("style","width:200px;height:200px;margin:1rem;object-fit:cover;border-radius: 10%;");
+								imgSection.append(newChild);
+							});
+						}
+					}
+
+				}
+				request.send();
+			}else{
+
+				console.log("Image exists!!");
+			}
+
+		}
+	</script>
+</div>
+</html>

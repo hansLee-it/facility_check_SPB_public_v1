@@ -3,14 +3,14 @@
 	<div layout:fragment="content">
 		  <!-- Page Heading -->
 		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-		      <h1 class="h3 mb-0 text-gray-800">유저 로그</h1>
+		      <h1 class="h3 mb-0 text-gray-800">활동 이력</h1>
 		  </div>	  
 	   
 			 
 				  
 		 <div class="card shadow mb-4">
 		     <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
-		         <h6 class="m-0 font-weight-bold text-primary">로그 목록</h6>
+		         <h6 class="m-0 font-weight-bold text-primary">활동 이력 목록</h6>
 		     </div>
 		     <div class="card-body">
 		         <div class="table-responsive">
@@ -18,8 +18,8 @@
 						 <thead>
 						 <tr class="text-center">
 							 <th>아이디</th>
-							 <th>유저명</th>
-							 <th>접속IP</th>
+							 <th>유저 명</th>
+							 <th>접속 IP</th>
 							 <th>페이지</th>
 							 <th>활동</th>
 							 <th>결과</th>
@@ -30,7 +30,7 @@
 						 <tbody class="text-center">
 						 <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
 						 <!--/*@thymesVar id="noticeId" type="String"*/-->
-						 <tr th:each="userLog, index : ${userLogList}">
+						 <tr class="text-center" th:each="userLog, index : ${userLogList}">
 							 <td th:text="${userLog.userId}">Tiger Nixon</td>
 							 <td th:text="${userLog.userName}">System Architect</td>
 							 <td th:text="${userLog.clientIp}">System Architect</td>

@@ -3,7 +3,7 @@
 	<div layout:fragment="content">
 		  <!-- Page Heading -->
 		  <div class="d-sm-flex align-items-center justify-content-between mb-4">
-		      <h1 class="h3 mb-0 text-gray-800">기타작업</h1>
+		      <h1 class="h3 mb-0 text-gray-800">기타 작업</h1>
 		  </div>
 
 
@@ -17,7 +17,7 @@
 				  
 		 <div class="card shadow mb-4">
 		     <div class="card-header py-3 d-sm-flex align-items-center justify-content-between mb-4">
-		         <h6 class="m-0 font-weight-bold text-primary">기타작업 목록</h6>
+		         <h6 class="m-0 font-weight-bold text-primary">기타 작업 목록</h6>
 		     </div>
 			 <!-- Content Row -->
 			 <div class="row" style="text-align:center;">
@@ -153,12 +153,12 @@
 							 </tr>
 
 
-							 <tr th:each="extraWork, index : ${extraWorkList}" th:onclick="|location.href='@{/works/extra_work/extra_work_view(extraWorkId=${extraWork.extraWorkId})}'|">
+							 <tr class="text-center" th:each="extraWork, index : ${extraWorkList}" th:onclick="|location.href='@{/works/extra_work/extra_work_view(extraWorkId=${extraWork.extraWorkId})}'|">
 								 <td th:text="${(page_index*10)+index.count}"></td>
 								 <td th:text="${extraWork.stationName}">System Architect</td>
 								 <td th:if="${not extraWork.isAllShop}" th:text="${extraWork.shopName}">System Architect</td>
 								 <td th:if="${extraWork.isAllShop}">전체</td>
-								 <td th:text="${extraWork.title}" class="text-left">System Architect</td>
+								 <td class="long-text-tr" th:text="${extraWork.title}">System Architect</td>
 								 <td th:text="${#temporals.format(extraWork.fromDate, 'yyyy-MM-dd')}">2011/04/25</td>
 								 <td th:text="${#temporals.format(extraWork.toDate, 'yyyy-MM-dd')}">2011/04/25</td>
 								 <td th:text="${extraWork.editorName}">2011/04/25</td>

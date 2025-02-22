@@ -394,3 +394,12 @@ a:hover{
     text-overflow: ellipsis;
     word-break: break-all;
 }
+
+.long-text-tr{
+    text-align: left;
+    width:30%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+}

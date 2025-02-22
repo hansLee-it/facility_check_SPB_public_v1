@@ -19,7 +19,7 @@
         <li class="nav-item">
             <a class="nav-link" th:href="@{/home}">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>대시보드</span></a>				
+                <span>대시보드</span></a>
 			<a class="nav-link" th:href="@{/notice/notice_list}">
 			    <i class="fas fa-fw fa-bell"></i>
 			    <span>공지사항</span></a>
@@ -39,7 +39,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFire"
                 aria-expanded="true" aria-controls="collapseFire">
                 <i class="fas fa-fw fa-check-double"></i>
-                <span>소방점검</span>
+                <span>소방 점검</span>
             </a>
             <div id="collapseFire" class="collapse" aria-labelledby="headingFire"
                 data-parent="#accordionSidebar">
@@ -55,7 +55,7 @@
 		    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMeasure"
 		        aria-expanded="true" aria-controls="collapseMeasure">
 		        <i class="fas fa-fw fa-shower"></i>
-		        <span>수도검침</span>
+		        <span>수도 검침</span>
 		    </a>
 		    <div id="collapseMeasure" class="collapse" aria-labelledby="headingMeasure"
 		        data-parent="#accordionSidebar">
@@ -71,13 +71,13 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseEquipment"
                aria-expanded="true" aria-controls="collapseEquipment">
                 <i class="fas fa-fw fa-fire-extinguisher"></i>
-                <span>장비현황</span>
+                <span>장비 점검</span>
             </a>
             <div id="collapseEquipment" class="collapse" aria-labelledby="headingEquipment"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="@{/works/equipment/equipment_check_list}">조회</a>
-                    <a class="collapse-item" th:href="@{/works/equipment/equipment_check_write}">작성</a>
+                    <a class="collapse-item" th:href="@{/works/equipment_check/equipment_check_list}">조회</a>
+                    <a class="collapse-item" th:href="@{/works/equipment_check/equipment_check_write}">작성</a>
                 </div>
             </div>
         </li>
@@ -87,13 +87,13 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseImprovement"
                aria-expanded="true" aria-controls="collapseImprovement">
                 <i class="fas fa-fw fa-check-square"></i>
-                <span>개선현황</span>
+                <span>조치 요청</span>
             </a>
             <div id="collapseImprovement" class="collapse" aria-labelledby="headingImprovement"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" th:href="@{/works/improvement/improvement_list}">조회</a>
-                    <a class="collapse-item" th:href="@{/works/improvement/improvement_write}">작성</a>
+                    <a class="collapse-item" th:href="@{/works/issue/issue_list}">조회</a>
+                    <a class="collapse-item" th:href="@{/works/issue/issue_write}">작성</a>
                 </div>
             </div>
         </li>
@@ -103,7 +103,7 @@
 		    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseExtra"
 		        aria-expanded="true" aria-controls="collapseExtra">
 		        <i class="fas fa-fw fa-paste"></i>
-		        <span>기타작업</span>
+		        <span>기타 작업</span>
 		    </a>
 		    <div id="collapseExtra" class="collapse" aria-labelledby="headingExtra"
 		        data-parent="#accordionSidebar">
@@ -133,7 +133,7 @@
                 data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">내 정보</h6>
-                    <a class="collapse-item" th:href="@{/settings/my_info/my_info_view}">프로필 조회</a>
+                    <a class="collapse-item" th:href="@{/settings/my_info/my_info_view}">내 계정 조회</a>
                     <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">계정 관리</h6>
                     <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/account/account_list}">계정 관리</a>
                     <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">이력</h6>
@@ -147,7 +147,7 @@
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInfo"
                aria-expanded="true" aria-controls="collapseInfo">
                 <i class="fas fa-fw fa-wrench"></i>
-                <span>정보관리</span>
+                <span>정보 관리</span>
             </a>
             <div id="collapseInfo" class="collapse" aria-labelledby="headingInfo"
                  data-parent="#accordionSidebar">
@@ -155,8 +155,8 @@
                     <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">일정 관리</h6>
                     <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/check_schedule/check_schedule_list}">점검 일정 관리</a>
                     <h6 class="collapse-header" sec:authorize="hasAuthority('ROLE_ADMIN')">시설 관리</h6>
-                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/facility/station_list}">지하철 관리</a>
-                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/facility/shop_list}">매장 관리</a>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/station/station_list}">지하철 관리</a>
+                    <a class="collapse-item" sec:authorize="hasAuthority('ROLE_ADMIN')" th:href="@{/settings/shop/shop_list}">매장 관리</a>
                 </div>
             </div>
         </li>

@@ -3,7 +3,7 @@
 <div layout:fragment="content">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">장비점검</h1>
+        <h1 class="h3 mb-0 text-gray-800">장비 점검</h1>
     </div>
     <!-- Hided Values for Unique id and values -->
     <!--/*@thymesVar id="notice_id" type="text"*/-->
@@ -28,7 +28,7 @@
         <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
             <div class="align-items-center justify-content-between mb-4">
                 <div class="col mr-2">
-                    <h5 class="h5 text-gray-800">역명</h5>
+                    <h5 class="h5 text-gray-800">역 명</h5>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
         <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
             <div class="align-items-center justify-content-between mb-4">
                 <div class="col mr-2">
-                    <h5 class="h5 text-gray-800">가게명</h5>
+                    <h5 class="h5 text-gray-800">가게 명</h5>
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                     <!-- Basic Card Example -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="h5 text-gray-800">상세내용</h6>
+                            <h6 class="h5 text-gray-800">상세 내용</h6>
                         </div>
                         <div class="card-body" th:text="${equipment_check.memo}">
                         </div>
@@ -118,7 +118,7 @@
         <div class="col-lg-12 col-xl-12 col-md-12 mb-12">
             <div class="align-items-center justify-content-between mb-4">
                 <div class="col mr-2">
-                    <h5 class="h5 text-gray-800">첨부파일
+                    <h5 class="h5 text-gray-800">첨부 파일
                     </h5>
                     <ul class="list-group">
                         <li th:each="file, index : ${fileList}" class="list-group-item">

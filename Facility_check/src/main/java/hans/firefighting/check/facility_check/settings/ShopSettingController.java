@@ -34,7 +34,7 @@ import java.util.UUID;
  */
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/settings/facility/shop")
+@RequestMapping("/settings/shop")
 public class ShopSettingController{
 
     @Autowired
@@ -79,7 +79,7 @@ public class ShopSettingController{
         modelAndView.addObject("next_page_index", nextPageIndex);
         modelAndView.addObject("max_page_index", max_page_index);
         modelAndView.addObject("shop_list", shop_list);
-        modelAndView.setViewName("settings/facility/shop_list");
+        modelAndView.setViewName("settings/shop/shop_list");
         return modelAndView;
     }
 
@@ -102,7 +102,7 @@ public class ShopSettingController{
 
         modelAndView.addObject("shopId", shopId);
         modelAndView.addObject("shop", shopSettingService.selectShop(shopId));
-        modelAndView.setViewName("settings/facility/shop_write");
+        modelAndView.setViewName("settings/shop/shop_write");
         return modelAndView;
     }
 
@@ -125,7 +125,7 @@ public class ShopSettingController{
         LOGGER.info("View >>>  Shop Setting Write");
 
         modelAndView.addObject("shopId", "SH-" + UUID.randomUUID().toString());
-        modelAndView.setViewName("settings/facility/shop_write");
+        modelAndView.setViewName("settings/shop/shop_write");
         return modelAndView;
     }
 

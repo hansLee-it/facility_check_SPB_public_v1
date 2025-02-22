@@ -286,7 +286,7 @@
             formData.append("station_id", document.getElementById("station-id").value);
             formData.append("station_name", document.getElementById("new-station-input").value);
             const request = new XMLHttpRequest();
-            request.open('post', '/settings/facility/station/station_add');
+            request.open('post', '/settings/station/station_add');
             request.onload = function () {
                 if (request.status >= 200 && request.status < 300) {
                     // the load method accepts either a string (id) or an object
@@ -301,7 +301,7 @@
                         timer: 1500
                     }).then((result) => {
                         if(result.dismiss === Swal.DismissReason.timer){
-                            location.href="/settings/facility/station";
+                            location.href="/settings/station";
                         }
                     });
                 } else {
@@ -322,7 +322,7 @@
             formData.append("station_id", document.getElementById("station-id").value);
             formData.append("station_name", document.getElementById("edit-station-input").value);
             const request = new XMLHttpRequest();
-            request.open('post', '/settings/facility/station/station_edit');
+            request.open('post', '/settings/station/station_edit');
             request.onload = function () {
                 if (request.status >= 200 && request.status < 300) {
                     // the load method accepts either a string (id) or an object
@@ -337,7 +337,7 @@
                         timer: 1500
                     }).then((result) => {
                         if(result.dismiss === Swal.DismissReason.timer){
-                            location.href="/settings/facility/station";
+                            location.href="/settings/station";
                         }
                     });
                 } else {

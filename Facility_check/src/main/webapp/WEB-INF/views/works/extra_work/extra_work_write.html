@@ -3,7 +3,7 @@
 <div layout:fragment="content">
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">기타작업</h1>
+		<h1 class="h3 mb-0 text-gray-800">기타 작업</h1>
 	</div>
 	<!-- Datas -->
 	<input type="text" id="extra_work_id" th:value="${#sets.isEmpty(extra_work)?extraWorkId:extra_work.extraWorkId}" style="display:none;"/>
@@ -38,7 +38,7 @@
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
 					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
-						<a class="navbar-brand" href="#">역명</a>
+						<a class="navbar-brand" href="#">역 명</a>
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" th:text="${#sets.isEmpty(extra_work)? '선택' : extra_work.stationName}" th:data-value="${#sets.isEmpty(extra_work)? '' : extra_work.stationId}" id="station-parent" readonly="true" value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -60,7 +60,7 @@
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
 					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
-						<a class="navbar-brand" href="#">매장</a>
+						<a class="navbar-brand" href="#">매장 명</a>
 						<div>
 							<input th:if="${#sets.isEmpty(extra_work)}" type="checkbox" id="isAllShop" value="1" checked="checked" />
 							<input th:if="${not #sets.isEmpty(extra_work)}" type="checkbox" id="isAllShop" value="1" th:checked="${extra_work.isAllShop?'checked':''}" /> 전체
@@ -116,7 +116,7 @@
 		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
-					<h5 class="h5 text-gray-800">상세내용</h5>
+					<h5 class="h5 text-gray-800">상세 내용</h5>
 					<textarea class="form-control" id="detail_area" rows="10" style="width:100%;resize:none;" placeholder="내용을 입력해 주세요." th:text="${#sets.isEmpty(extra_work)?'':extra_work.detail}"></textarea>
 
 				</div>
@@ -128,7 +128,7 @@
 		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
-					<h5 class="h5 text-gray-800">파일첨부
+					<h5 class="h5 text-gray-800">파일 첨부
 					</h5>
 					<!-- We'll transform this input into a pond -->
 					<input type="file" class="filepond" name="filepond"/>

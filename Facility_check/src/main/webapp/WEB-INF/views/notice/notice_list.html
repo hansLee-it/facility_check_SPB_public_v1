@@ -16,7 +16,7 @@
 		     </div>
 			 <!-- Content Row -->
 			 <div class="row" style="text-align:center;">
-				 <div class="col-lg-6 col-xl-6 col-md-6">
+				 <div class="col-lg-4 col-xl-4 col-md-4">
 					 <div class="align-items-center justify-content-between mb-4">
 						 <div class="col mr-2">
 							 <a onclick="location.href='/notice/notice_list'" id="search-all-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-success shadow-sm" style="display: block !important;"><i
@@ -24,7 +24,7 @@
 						 </div>
 					 </div>
 			 	</div>
-				 <div class="col-lg-6 col-xl-6 col-md-6">
+				 <div class="col-lg-4 col-xl-4 col-md-4">
 					 <div class="align-items-center justify-content-between mb-4">
 						 <div class="col mr-2">
 							 <a onclick="showDatePicker()" id="search-date" class="d-none d-sm-inline-block btn btn-sm btn-outline-warning shadow-sm" style="display: block !important;"><i
@@ -32,45 +32,42 @@
 						 </div>
 					 </div>
 				 </div>
-			 </div>
-
-
-			 <!-- Content Row -->
-			 <div class="row">
-				 <div class="col-lg-12 col-xl-12 col-md-12 float-left">
+				 <div class="col-lg-4 col-xl-4 col-md-4">
 					 <div class="align-items-center justify-content-between mb-4">
 						 <div class="col mr-2">
-							 <div id="allDatePicker">
-								 <input type="text" disabled value="전체기간">
+							 <div id="allDatePicker" >
+								 <input type="text" class="text-center" style="width:100%;" disabled value="전체기간">
 							 </div>
 							 <div class="datepicker" id="datePicker" style="display:none;">
-								 <input type="date" class="selected-check-date" id="search-datepicker-input" />
+								 <input type="date" class="selected-check-date text-center" style="width:100%;" id="search-datepicker-input" />
 							 </div>
 						 </div>
 					 </div>
 				 </div>
 			 </div>
+
+
 		     <div class="card-body">
 		         <div class="table-responsive">
 		             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-		                 <thead>
-		                     <tr>
+		                 <thead class="text-center">
+		                     <tr class="table-header">
 		                         <th>번호</th>
 		                         <th>제목</th>
-		                         <th>게시기간</th>
-		                         <th>작성날짜</th>
-								 <th>작성자</th>
+		                         <th>게시 기간</th>
+		                         <th>작성 날짜</th>
+								 <th>작성 자</th>
 		                     </tr>
 		                 </thead>
 		                 <tbody>
 		                     <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
 		                     <!--/*@thymesVar id="noticeId" type="String"*/-->
 		                     <tr th:each="notice, index : ${noticeList}" th:onclick="|location.href='@{/notice/notice_view(notice_id=${notice.noticeId})}'|">
-		                         <td th:text="${index.count}">Tiger Nixon</td>
-		                         <td th:text="${notice.title}">System Architect</td>
-		                         <td th:text="${#temporals.format(notice.fromDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(notice.toDate, 'yyyy-MM-dd')}">61</td>
-		                         <td th:text="${#temporals.format(notice.generateTime, 'yyyy-MM-dd HH:mm:ss')}">2011/04/25</td>
-								 <td th:text="${notice.writerName}">2011/04/25</td>
+		                         <td class="text-center index-tr" th:text="${index.count}">Tiger Nixon</td>
+		                         <td class="long-text-tr" th:text="${notice.title}">System Architect</td>
+		                         <td class="text-center" th:text="${#temporals.format(notice.fromDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(notice.toDate, 'yyyy-MM-dd')}">61</td>
+		                         <td class="text-center" th:text="${#temporals.format(notice.generateTime, 'yyyy-MM-dd HH:mm:ss')}">2011/04/25</td>
+								 <td class="text-center" th:text="${notice.writerName}">2011/04/25</td>
 		                     </tr>
 		                 </tbody>
 		             </table>

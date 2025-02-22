@@ -37,7 +37,7 @@ import java.util.UUID;
  */
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
-@RequestMapping("/settings/facility/station")
+@RequestMapping("/settings/station")
 public class StationSettingController{
 
     @Autowired
@@ -79,7 +79,7 @@ public class StationSettingController{
         modelAndView.addObject("next_page_index", nextPageIndex);
         modelAndView.addObject("max_page_index", max_page_index);
         modelAndView.addObject("station_list", station_list);
-        modelAndView.setViewName("settings/facility/station_list");
+        modelAndView.setViewName("settings/station/station_list");
         return modelAndView;
     }
 
@@ -103,7 +103,7 @@ public class StationSettingController{
         modelAndView.addObject("line_id", station.getLineId());
         modelAndView.addObject("station_id", station.getStationId());
         modelAndView.addObject("station", station);
-        modelAndView.setViewName("settings/facility/station_write");
+        modelAndView.setViewName("settings/station/station_write");
         return modelAndView;
     }
 
@@ -126,7 +126,7 @@ public class StationSettingController{
 
         modelAndView.addObject("line_id",  "LI-" + UUID.randomUUID().toString());
         modelAndView.addObject("station_id",  "ST-" + UUID.randomUUID().toString());
-        modelAndView.setViewName("settings/facility/station_write");
+        modelAndView.setViewName("settings/station/station_write");
         return modelAndView;
     }
 

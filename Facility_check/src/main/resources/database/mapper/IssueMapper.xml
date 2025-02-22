@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hans.firefighting.check.facility_check.db.mapper.IssueMapper">
+    <!-- Issue Table Query -->
+    <select id="selectIssueList" resultType="hans.firefighting.check.facility_check.works.IssueDTO">
+        SELECT
+        issue.issue_id AS issue_id
+        ,issue.shop_id AS shop_id
+        ,issue.detail AS detail
+        ,issue.issue_date AS issue_date
+        ,issue.writer_id AS writer_id
+        ,(
+            SELECT
+                user_name
+            FROM
+                user
+            WHERE
+                issue.writer_id = user.user_id
+        ) AS writer_name
+        ,(
+            SELECT
+                user_name
+            FROM
+                user
+            WHERE
+                issue.editor_id = user.user_id
+        ) AS editor_name
+        ,issue.editor_id AS editor_id
+        ,issue.generate_time AS generate_time
+        ,shop.shop_name AS shop_name
+        ,shop.station_id AS station_id
+        ,station.station_name AS station_name
+        ,station.line_id AS line_id
+        ,station.line_name AS line_name
+        ,(
+            SELECT
+                COUNT(improve.improve_id)
+            FROM
+                improve
+            WHERE
+                improve.issue_id = issue.issue_id
+            AND
+                improve.is_enable = true
+         ) AS count_improve
+        FROM
+        issue
+        JOIN
+        shop
+        ON
+        issue.shop_id = shop.shop_id
+        JOIN
+        station
+        ON
+        shop.station_id = station.station_id
+        WHERE
+        issue.is_enable = true
+        <if test='searchDate != null'>
+            AND
+            #{searchDate} = issue.issue_date
+        </if>
+        <if test='lineId != null and !lineId.equals("")'>
+            AND
+            station.line_id = #{lineId}
+        </if>
+        <if test='stationId != null and !stationId.equals("")'>
+            AND
+            station.station_id = #{stationId}
+        </if>
+        <if test='shopId != null and !shopId.equals("")'>
+            AND
+            issue.shop_id = #{shopId}
+        </if>
+        ORDER BY generate_time DESC
+        LIMIT ${startIndex}, 9;
+    </select>
+    <select id="countTotalIssue">
+        SELECT
+            COUNT(issue_id)
+        FROM
+            issue
+        WHERE
+            is_enable = true;
+    </select>
+    <select id="selectIssue" resultType="hans.firefighting.check.facility_check.works.IssueDTO">
+        SELECT
+            issue.issue_id AS issue_id
+             ,issue.shop_id AS shop_id
+             ,issue.detail AS detail
+             ,issue.issue_date AS issue_date
+             ,issue.writer_id AS writer_id
+             ,issue.editor_id AS editor_id
+             ,(
+                    SELECT
+                        user_name
+                    FROM
+                        user
+                    WHERE
+                        issue.writer_id = user.user_id
+                ) AS writer_name
+                     ,(
+                    SELECT
+                        user_name
+                    FROM
+                        user
+                    WHERE
+                        issue.editor_id = user.user_id
+                ) AS editor_name
+             ,issue.generate_time AS generate_time
+             ,shop.shop_name AS shop_name
+             ,shop.station_id AS station_id
+             ,station.station_name AS station_name
+             ,station.line_id AS line_id
+             ,station.line_name AS line_name
+        FROM
+            issue
+                JOIN
+            shop
+            ON
+                issue.shop_id = shop.shop_id
+                JOIN
+            station
+            ON
+                shop.station_id = station.station_id
+        WHERE
+            issue.issue_id = #{issueId}
+    </select>
+    <insert id="insertIssue">
+        INSERT INTO
+            issue(
+                     issue_id
+                   ,shop_id
+                   ,detail
+                   ,issue_date
+                   ,writer_id
+                   ,editor_id
+            )
+        VALUES(
+                #{issueId}
+              ,#{shopId}
+              ,#{detail}
+              ,#{issueDate}
+              ,#{writerId}
+              ,#{editorId}
+              )
+    </insert>
+
+    <update id="updateIssue">
+        UPDATE
+            issue
+        set
+            shop_id = #{shopId}
+          ,detail = #{detail}
+          ,issue_date = #{issueDate}
+          ,editor_id = #{editorId}
+          ,edit_time = NOW()
+        WHERE
+            issue_id = #{issueId};
+    </update>
+    <update id="disableIssue">
+        UPDATE
+            issue
+        set
+            is_enable = 0
+        WHERE
+            issue_id = #{issueId};
+    </update>
+
+    <!-- Improve Table Query -->
+    <select id="selectImproveList" resultType="hans.firefighting.check.facility_check.works.ImproveDTO">
+        SELECT
+         improve.improve_id AS improve_id
+        ,improve.issue_id AS issue_id
+        ,improve.detail AS detail
+        ,improve.improve_date AS improve_date
+        ,improve.writer_id AS writer_id
+        ,improve.editor_id AS editor_id
+        ,(
+            SELECT
+                user_name
+            FROM
+                user
+            WHERE
+                improve.writer_id = user.user_id
+        ) AS writer_name
+        ,(
+            SELECT
+                user_name
+            FROM
+                user
+            WHERE
+                improve.editor_id = user.user_id
+        ) AS editor_name
+        ,improve.generate_time AS generate_time
+        FROM
+            improve
+        WHERE
+            improve.is_enable = true
+        AND
+            issue_id = #{issueId}
+        ORDER BY improve_date DESC, generate_time DESC
+    </select>
+    <select id="selectImprove" resultType="hans.firefighting.check.facility_check.works.ImproveDTO">
+        SELECT
+             improve.issue_id AS issue_id
+            ,improve.improve_id AS improve_id
+            ,improve.detail AS detail
+            ,improve.improve_date AS improve_date
+            ,improve.writer_id AS writer_id
+            ,improve.editor_id AS editor_id
+            ,(
+                SELECT
+                    user_name
+                FROM
+                    user
+                WHERE
+                    improve.writer_id = user.user_id
+            ) AS writer_name
+                ,(
+                SELECT
+                    user_name
+                FROM
+                    user
+                WHERE
+                    improve.editor_id = user.user_id
+            ) AS editor_name
+            ,improve.generate_time AS generate_time
+        FROM
+            improve
+        WHERE
+            improve.improve_id = #{improveId}
+    </select>
+    <insert id="insertImprove">
+        INSERT INTO
+            improve(
+                   improve_id
+                 ,issue_id
+                 ,detail
+                 ,improve_date
+                 ,writer_id
+                 ,editor_id
+        )
+        VALUES(
+                #{improveId}
+              ,#{issueId}
+              ,#{detail}
+              ,#{improveDate}
+              ,#{writerId}
+              ,#{editorId}
+              )
+    </insert>
+
+    <update id="updateImprove">
+        UPDATE
+            improve
+        set
+          detail = #{detail}
+          ,improve_date = #{improveDate}
+          ,editor_id = #{editorId}
+          ,edit_time = NOW()
+        WHERE
+            improve_id = #{improveId};
+    </update>
+    <update id="disableImprove">
+        UPDATE
+            improve
+        set
+            is_enable = 0
+        WHERE
+            improve_id = #{improveId};
+    </update>
+</mapper>

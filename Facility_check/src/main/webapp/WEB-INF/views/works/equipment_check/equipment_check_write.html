@@ -279,13 +279,25 @@
 							if (request.status >= 200 && request.status < 300) {
 								// the load method accepts either a string (id) or an object
 								var response = JSON.parse(request.response);
-								alert(response.data);
-								console.log(response);
+								Swal.fire({
+									position: "center",
+									icon: "success",
+									title: "삭제 완료",
+									showConfirmButton: false,
+									timer: 1500
+								});
 
 								load(request.responseText);
 							} else {
 								// Can call the error method if something is wrong, should exit after
-								error('oh no');
+
+								Swal.fire({
+									position: "center",
+									icon: "error",
+									title: "삭제 실패",
+									showConfirmButton: false,
+									timer: 1500
+								});
 							}
 						};
 
@@ -305,19 +317,10 @@
 					}
 				}
 				// 파일 올리는 즉시 업로드 끄기
+				, acceptedFileTypes: ['image/*']
 				, instantUpload: false
 				, allowImageExifOrientation: true
 				, allowImagePreview: true
-				, acceptedFileTypes: [
-					'image/*',
-					'application/pdf',
-					'application/x-zip-compressed',
-					'text/plain',
-					'application/msword',
-					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					'application/vnd.ms-powerpoint',
-				]
 				, allowProcess: false
 				, maxParallelUploads: 10 // 한번에 올릴 수 있는 파일 개수
 				, maxFiles: 10
@@ -360,7 +363,13 @@
 					})
 
 				} else {
-					alert("정상수신실패:"+request.status);
+					Swal.fire({
+						position: "center",
+						icon: "error",
+						title: "서버 오류 발생",
+						showConfirmButton: false,
+						timer: 1500
+					});
 				}
 
 			}
@@ -391,7 +400,7 @@
 		// Select the file input and use
 		// create() to turn it into a pond
 		// filepond js 만들기
-		FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation);
+		FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation,FilePondPluginFileValidateType);
 		var fileUploader = FilePond.create(document.querySelector('.filepond'));
 		// 등록된 파일 불러오는곳
 		document.addEventListener('FilePond:init', function () {
@@ -426,6 +435,7 @@
 						// 보여지는 파일 이름
 						fileUploader.getFiles()[0].file.name = files[j].fileOriginalName;
 						fileUploader.getFiles()[0].file.source = files[j].base64;
+
 						// 이미 업로드 된 파일 재업로드 안되도록
 						fileUploader.getFiles()[0].origin = 3;
 
@@ -685,7 +695,6 @@
 							var shopParent = document.getElementById("shop-parent");
 							shopParent.setAttribute("data-value",this.getAttribute("data-value"));
 							shopParent.innerHTML = this.innerHTML;
-							updateRecentCheck();
 						}
 						childGroup.append(newChild);
 					})

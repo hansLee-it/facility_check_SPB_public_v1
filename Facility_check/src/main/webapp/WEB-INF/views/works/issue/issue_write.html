@@ -3,14 +3,13 @@
 <div layout:fragment="content">
 	<!-- Page Heading -->
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-		<h1 class="h3 mb-0 text-gray-800">기타작업</h1>
+		<h1 class="h3 mb-0 text-gray-800">조치 요청</h1>
 	</div>
 	<!-- Datas -->
-	<input type="text" id="extra_work_id" th:value="${#sets.isEmpty(extra_work)?extraWorkId:extra_work.extraWorkId}" style="display:none;"/>
-	<input type="text" id="isAdd" th:value="${#sets.isEmpty(extra_work)?true:false}" style="display:none;"/>
+	<input type="text" id="issue_id" th:value="${#sets.isEmpty(issue)?issueId:issue.issueId}" style="display:none;"/>
+	<input type="text" id="isAdd" th:value="${#sets.isEmpty(issue)?true:false}" style="display:none;"/>
 
-	<input type="text" style="display:none;" id="selected_from_date" th:value="${#sets.isEmpty(extra_work)?'':#temporals.format(extra_work.fromDate, 'yyyy-MM-dd')}" readonly/>
-	<input type="text" style="display:none;" id="selected_to_date" th:value="${#sets.isEmpty(extra_work)?'':#temporals.format(extra_work.toDate, 'yyyy-MM-dd')}" readonly/>
+	<input type="text" style="display:none;" id="selected_issue_date" th:value="${#sets.isEmpty(issue)?'':#temporals.format(issue.issueDate, 'yyyy-MM-dd')}" readonly/>
 
 	<!-- Content Row -->
 	<div class="row">
@@ -21,7 +20,7 @@
 						<a class="navbar-brand" href="#">호선</a>
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#sets.isEmpty(extra_work)? '선택' : extra_work.lineName}" th:data-value="${#sets.isEmpty(extra_work)? '' : extra_work.lineId}"
+								<a class="nav-link dropdown-toggle station-parent-bar" href="#" th:text="${#sets.isEmpty(issue)? '선택' : issue.lineName}" th:data-value="${#sets.isEmpty(issue)? '' : issue.lineId}"
 								   id="line-parent"  value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									선택
 								</a>
@@ -41,7 +40,7 @@
 						<a class="navbar-brand" href="#">역명</a>
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" th:text="${#sets.isEmpty(extra_work)? '선택' : extra_work.stationName}" th:data-value="${#sets.isEmpty(extra_work)? '' : extra_work.stationId}" id="station-parent" readonly="true" value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link dropdown-toggle" href="#" th:text="${#sets.isEmpty(issue)? '선택' : issue.stationName}" th:data-value="${#sets.isEmpty(issue)? '' : issue.stationId}" id="station-parent" readonly="true" value="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									선택
 								</a>
 								<div class="dropdown-menu dropdown-menu-right animated--grow-in" id="station-child-group" aria-labelledby="navbarDropdown">
@@ -61,13 +60,9 @@
 				<div class="col mr-2">
 					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
 						<a class="navbar-brand" href="#">매장</a>
-						<div>
-							<input th:if="${#sets.isEmpty(extra_work)}" type="checkbox" id="isAllShop" value="1" checked="checked" />
-							<input th:if="${not #sets.isEmpty(extra_work)}" type="checkbox" id="isAllShop" value="1" th:checked="${extra_work.isAllShop?'checked':''}" /> 전체
-						</div>
 						<ul class="navbar-nav ml-auto">
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" th:text="${#sets.isEmpty(extra_work)? '선택' : extra_work.shopName}" th:data-value="${#sets.isEmpty(extra_work)? '' : extra_work.shopId}" id="shop-parent" role="button" value="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								<a class="nav-link dropdown-toggle" href="#" th:text="${#sets.isEmpty(issue)? '선택' : issue.shopName}" th:data-value="${#sets.isEmpty(issue)? '' : issue.shopId}" id="shop-parent" role="button" value="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									선택
 								</a>
 								<div class="dropdown-menu dropdown-menu-right animated--grow-in" id="shop-child-group" aria-labelledby="navbarDropdown">
@@ -83,14 +78,12 @@
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
 					<nav class="navbar navbar-expand navbar-light bg-light mb-4">
-						<a class="navbar-brand" href="#">기간</a>
+						<a class="navbar-brand" href="#">요청 날짜</a>
 						<div class="navbar-nav ml-auto">
 							<div class="nav-item dropdown">
 
 								<div class="datepicker">
-									<input type="text" class="selected-check-date" id="from-datepicker-input">
-									~
-									<input type="text" class="selected-check-date" id="to-datepicker-input">
+									<input type="text" class="selected-check-date" id="datepicker-input">
 								</div>
 							</div>
 						</div>
@@ -105,19 +98,8 @@
 		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
-					<h5 class="h5 text-gray-800">제목</h5>
-					<input class="form-control" type="text" id="title_area" placeholder="제목을 입력해 주세요." th:value="${#sets.isEmpty(extra_work)?'':extra_work.title}"></input>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- Content Row -->
-	<div class="row">
-		<div class="col-lg-12 col-xl-12 col-md-12 mb-12">
-			<div class="align-items-center justify-content-between mb-4">
-				<div class="col mr-2">
-					<h5 class="h5 text-gray-800">상세내용</h5>
-					<textarea class="form-control" id="detail_area" rows="10" style="width:100%;resize:none;" placeholder="내용을 입력해 주세요." th:text="${#sets.isEmpty(extra_work)?'':extra_work.detail}"></textarea>
+					<h5 class="h5 text-gray-800">요청사항</h5>
+					<textarea class="form-control" id="detail_area" rows="10" style="width:100%;resize:none;" placeholder="내용을 입력해 주세요." th:text="${#sets.isEmpty(issue)?'':issue.detail}"></textarea>
 
 				</div>
 			</div>
@@ -148,9 +130,9 @@
 			<div class="align-items-center justify-content-between mb-4">
 				<div class="col mr-2">
 
-					<a th:if="${#sets.isEmpty(extraWork)}" href="javaScript:checkData()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
+					<a th:if="${#sets.isEmpty(issue)}" href="javaScript:checkData()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
 							class="fas fa-save fa-sm"></i>&nbsp저장</a>
-					<a th:unless="${#sets.isEmpty(extraWork)}" href="javaScript:checkData()" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
+					<a th:unless="${#sets.isEmpty(issue)}" href="javaScript:checkData()" class="d-none d-sm-inline-block btn btn-sm btn-warning shadow-sm" style="display: block !important;"><i
 							class="fas fa-save fa-sm"></i>&nbsp수정</a>
 				</div>
 			</div>
@@ -160,25 +142,17 @@
 	<script class="code-js">
 		document.addEventListener("DOMContentLoaded", function() {
 			// Date range picker init START
-			var selectedFromDate = new Date();
-			var selectedToDate =  new Date();
-			if(document.getElementById("selected_from_date").value) {
-				selectedFromDate = new Date(document.getElementById("selected_from_date").value);
-			}
-			if(document.getElementById("selected_to_date").value) {
-				selectedToDate = new Date(document.getElementById("selected_to_date").value);
+			var selectedIssueDate = new Date();
+			if(document.getElementById("selected_issue_date").value) {
+				selectedFromDate = new Date(document.getElementById("selected_issue_date").value);
 			}
 			var today = new Date();
 
-			flatpickr(document.getElementById("from-datepicker-input"),{
+			flatpickr(document.getElementById("datepicker-input"),{
 				dateFormat: "Y-m-d",
-				defaultDate: selectedFromDate,
+				defaultDate: selectedIssueDate,
 			});
 
-			flatpickr(document.getElementById("to-datepicker-input"),{
-				dateFormat: "Y-m-d",
-				defaultDate: selectedToDate,
-			});
 
 			// Date range picker init END
 			/**
@@ -193,7 +167,7 @@
 						// fieldName is the name of the input field
 						// file is the actual file object to send
 						const formData = new FormData();
-						formData.append("document_id", document.getElementById("extra_work_id").value);
+						formData.append("document_id", document.getElementById("issue_id").value);
 						formData.append("file", file);
 						const request = new XMLHttpRequest();
 						request.open('POST', '/file/upload');
@@ -238,7 +212,7 @@
 						console.log(processResult);
 						console.log(processResult.split('/')[3].trim())
 						const formData = new FormData();
-						formData.append("document_id", document.getElementById("extra_work_id").value);
+						formData.append("document_id", document.getElementById("issue_id").value);
 						formData.append("file_id", processResult.split('/')[3].trim());
 						const request = new XMLHttpRequest();
 						request.open('POST', '/file/delete');
@@ -281,7 +255,7 @@
 						console.log(processResult);
 						console.log(processResult.split('/')[3].trim())
 						const formData = new FormData();
-						formData.append("document_id", document.getElementById("extra_work_id").value);
+						formData.append("document_id", document.getElementById("issue_id").value);
 						formData.append("file_id", processResult.split('/')[3].trim());
 						const request = new XMLHttpRequest();
 						request.open('POST', '/file/delete');
@@ -325,14 +299,7 @@
 				, allowImageExifOrientation: true
 				, allowImagePreview: true
 				, acceptedFileTypes: [
-					'image/*',
-					'application/pdf',
-					'application/x-zip-compressed',
-					'text/plain',
-					'application/msword',
-					'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-					'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-					'application/vnd.ms-powerpoint',
+					'image/*'
 				]
 				, allowProcess: false
 				, maxParallelUploads: 10 // 한번에 올릴 수 있는 파일 개수
@@ -407,11 +374,11 @@
 		// Select the file input and use
 		// create() to turn it into a pond
 		// filepond js 만들기
-		FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation);
+		FilePond.registerPlugin(FilePondPluginImagePreview,FilePondPluginImageExifOrientation,FilePondPluginFileValidateType);
 		var fileUploader = FilePond.create(document.querySelector('.filepond'));
 		// 등록된 파일 불러오는곳
 		document.addEventListener('FilePond:init', function () {
-			const documentId = document.getElementById("extra_work_id").value;
+			const documentId = document.getElementById("issue_id").value;
 			const request = new XMLHttpRequest();
 			request.open('GET', '/file/selectDocumentFiles?documentId=' + documentId);
 
@@ -459,54 +426,24 @@
 		}, {once: true});
 
 		function checkData(){
-			let title = document.getElementById("title_area").value;
 			let detail = document.getElementById("detail_area").value;
 			let stationId = document.getElementById("station-parent").getAttribute("data-value");
 			let shopId = document.getElementById("shop-parent").getAttribute("data-value");
-			let isAllShop = document.getElementById("isAllShop").checked;
-			let selectedFromDate = document.getElementById("from-datepicker-input").value;
-			let selectedToDate = document.getElementById("to-datepicker-input").value;
+			let selectedIssueDate = document.getElementById("datepicker-input").value;
 			let isAdd = document.getElementById("isAdd").value === 'true';
-			if(title){
-				if(detail) {
-					if(stationId) {
-						if (selectedFromDate) {
-							if (selectedToDate) {
-								if(isAllShop){
-									fileUploader.processFiles().then(() => {
-										if(isAdd) writeExtraWork();
-										else editExtraWork();
-									});
-								}else{
-									if(shopId){
-										fileUploader.processFiles().then(() => {
-											if(isAdd) writeExtraWork();
-											else editExtraWork();
-										});
-									}else{
-										Swal.fire({
-											position: "center",
-											icon: "error",
-											title: "가게를 선택해주세요",
-											showConfirmButton: false,
-											timer: 1500
-										});
-									}
-								}
-							}else{
-								Swal.fire({
-									position: "center",
-									icon: "error",
-									title: "끝 날짜를 선택해주세요",
-									showConfirmButton: false,
-									timer: 1500
-								});
-							}
+			if(detail) {
+				if(stationId) {
+					if (selectedIssueDate) {
+						if(shopId){
+							fileUploader.processFiles().then(() => {
+								if(isAdd) writeIssue();
+								else editIssue();
+							});
 						}else{
 							Swal.fire({
 								position: "center",
 								icon: "error",
-								title: "시작 날짜를 선택해주세요",
+								title: "가게를 선택해주세요",
 								showConfirmButton: false,
 								timer: 1500
 							});
@@ -515,7 +452,7 @@
 						Swal.fire({
 							position: "center",
 							icon: "error",
-							title: "역을 선택해주세요",
+							title: "조치 요청 날짜를 선택해주세요",
 							showConfirmButton: false,
 							timer: 1500
 						});
@@ -524,7 +461,7 @@
 					Swal.fire({
 						position: "center",
 						icon: "error",
-						title: "내용을 입력해주세요",
+						title: "역을 선택해주세요",
 						showConfirmButton: false,
 						timer: 1500
 					});
@@ -533,46 +470,28 @@
 				Swal.fire({
 					position: "center",
 					icon: "error",
-					title: "제목을 입력해주세요",
+					title: "내용을 입력해주세요",
 					showConfirmButton: false,
 					timer: 1500
-				}).then((result) => {
-					if(result.dismiss === Swal.DismissReason.timer){
-						location.reload();
-					}
 				});
 			}
 		}
 
-		function writeExtraWork(){
-			let extraWorkId = document.getElementById("extra_work_id").value;
-			let title = document.getElementById("title_area").value;
+		function writeIssue(){
+			let issueId = document.getElementById("issue_id").value;
 			let detail = document.getElementById("detail_area").value;
-			let selectedFromDate = document.getElementById("from-datepicker-input").value;
-			let selectedToDate = document.getElementById("to-datepicker-input").value;
-
-			let stationId = document.getElementById("station-parent").getAttribute("data-value");
+			let issueDate = document.getElementById("datepicker-input").value;
 			let shopId = document.getElementById("shop-parent").getAttribute("data-value");
-			let isAllShopBox = document.getElementById("isAllShop");
-			let isAllShop = isAllShopBox.checked;
 
 			const formData = new FormData();
-			formData.append("extraWorkId", extraWorkId);
-			formData.append("title", title);
+			formData.append("issueId", issueId);
 			formData.append("detail", detail);
-			formData.append("selectedFromDate", selectedFromDate);
-			formData.append("selectedToDate", selectedToDate);
-			formData.append("stationId", stationId);
+			formData.append("issueDate", issueDate);
 			formData.append("shopId", shopId);
-			if(isAllShop){
-				formData.append("isAllShop", 1);
-			}else{
-				formData.append("isAllShop", 0);
-			}
 
 			/*[PUT] PUT DB single Inspection selection */
 			const request = new XMLHttpRequest();
-			request.open('post', '/works/extra_work/extra_work_write');
+			request.open('post', '/works/issue/issue_write');
 			request.onload = function () {
 				if (request.status >= 200 && request.status < 300) {
 					// the load method accepts either a string (id) or an object
@@ -585,7 +504,7 @@
 						timer: 1500
 					}).then((result) => {
 						if(result.dismiss === Swal.DismissReason.timer){
-							location.href="/works/extra_work/extra_work_view?extraWorkId="+extraWorkId;
+							location.href="/works/issue/issue_view?issueId="+issueId;
 						}
 					});
 
@@ -608,37 +527,23 @@
 		}
 
 
-		function editExtraWork(){
+		function editIssue(){
 
-			let extraWorkId = document.getElementById("extra_work_id").value;
-			let title = document.getElementById("title_area").value;
+			let issueId = document.getElementById("issue_id").value;
 			let detail = document.getElementById("detail_area").value;
-			let selectedFromDate = document.getElementById("from-datepicker-input").value;
-			let selectedToDate = document.getElementById("to-datepicker-input").value;
+			let issueDate = document.getElementById("datepicker-input").value;
 
-			let stationId = document.getElementById("station-parent").getAttribute("data-value");
 			let shopId = document.getElementById("shop-parent").getAttribute("data-value");
-			let isAllShopBox = document.getElementById("isAllShop");
-			let isAllShop = isAllShopBox.checked;
 
 			const formData = new FormData();
-			formData.append("extraWorkId", extraWorkId);
-			formData.append("title", title);
+			formData.append("issueId", issueId);
 			formData.append("detail", detail);
-			formData.append("selectedFromDate", selectedFromDate);
-			formData.append("selectedToDate", selectedToDate);
-			formData.append("stationId", stationId);
+			formData.append("issueDate", issueDate);
 			formData.append("shopId", shopId);
-			console.log(isAllShop);
-			if(isAllShop){
-				formData.append("isAllShop", 1);
-			}else{
-				formData.append("isAllShop", 0);
-			}
 
 			/*[PUT] PUT DB single Inspection selection */
 			const request = new XMLHttpRequest();
-			request.open('post', '/works/extra_work/extra_work_edit');
+			request.open('post', '/works/issue/issue_edit');
 			request.onload = function () {
 				if (request.status >= 200 && request.status < 300) {
 					// the load method accepts either a string (id) or an object
@@ -651,7 +556,7 @@
 						timer: 1500
 					}).then((result) => {
 						if(result.dismiss === Swal.DismissReason.timer){
-							location.href="/works/extra_work/extra_work_view?extraWorkId="+extraWorkId;
+							location.href="/works/issue/issue_view?issueId="+issueId;
 						}
 					});
 
@@ -749,7 +654,6 @@
 							var shopParent = document.getElementById("shop-parent");
 							shopParent.setAttribute("data-value",this.getAttribute("data-value"));
 							shopParent.innerHTML = this.innerHTML;
-							updateRecentCheck();
 						}
 						childGroup.append(newChild);
 					})

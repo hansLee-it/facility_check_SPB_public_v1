@@ -3,7 +3,7 @@
 <div layout:fragment="content">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">가게 관리</h1>
+        <h1 class="h3 mb-0 text-gray-800">매장 관리</h1>
     </div>
     <!-- Datas -->
     <input style="display:none;" id="shopId" th:value="${shopId}"/>
@@ -14,7 +14,7 @@
         <div class="col-lg-12 mb-4">
             <div class="card bg-info text-white shadow">
                 <div class="card-body">
-                    추가할 가게
+                    추가할 매장
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
         <div class="col-lg-12 mb-4">
             <div class="card bg-info text-white shadow">
                 <div class="card-body">
-                    수정할 가게
+                    수정할 매장
                 </div>
             </div>
         </div>
@@ -86,7 +86,7 @@
         <div class="col-lg-3 col-xl-3 col-md-3 mb-3">
             <div class="align-items-center justify-content-between mb-4">
                 <div class="col mr-2">
-                    <h5 class="h5 text-gray-800">가게명 </h5>
+                    <h5 class="h5 text-gray-800">매장명 </h5>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@
                 <div class="col mr-2">
                     <a onclick="addShop()" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" style="display: block !important;"><i
                             class="fas fa-save fa-sm text-white-50"></i>&nbsp저장</a>
-            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -302,7 +302,7 @@
                     timer: 1500
                 }).then((result) => {
                     if(result.dismiss === Swal.DismissReason.timer){
-                        location.href="/settings/facility/shop";
+                        location.href="/settings/shop";
                     }
                 });
                 valiFlag = false;
@@ -312,7 +312,7 @@
                 Swal.fire({
                     position: "center",
                     icon: "error",
-                    title: "가게명을 입력해주세요.",
+                    title: "매장명을 입력해주세요.",
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -332,7 +332,7 @@
             formData.append("shop_name", shopName);
             if(dataValidation()){
                 const request = new XMLHttpRequest();
-                request.open('post', '/settings/facility/shop/shop_add');
+                request.open('post', '/settings/shop/shop_add');
                 request.onload = function () {
                     if (request.status >= 200 && request.status < 300) {
                         // the load method accepts either a string (id) or an object
@@ -347,7 +347,7 @@
                             timer: 1500
                         }).then((result) => {
                             if(result.dismiss === Swal.DismissReason.timer){
-                                location.href="/settings/facility/shop";
+                                location.href="/settings/shop";
                             }
                         });
                     } else {
@@ -373,7 +373,7 @@
 
             if(dataValidation()){
                 const request = new XMLHttpRequest();
-                request.open('post', '/settings/facility/shop/shop_edit');
+                request.open('post', '/settings/shop/shop_edit');
                 request.onload = function () {
                     if (request.status >= 200 && request.status < 300) {
                         // the load method accepts either a string (id) or an object
@@ -388,7 +388,7 @@
                             timer: 1500
                         }).then((result) => {
                             if(result.dismiss === Swal.DismissReason.timer){
-                                location.href="/settings/facility/shop";
+                                location.href="/settings/shop";
                             }
                         });
                     } else {

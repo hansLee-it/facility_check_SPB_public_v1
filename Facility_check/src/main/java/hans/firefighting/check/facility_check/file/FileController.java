@@ -142,10 +142,13 @@ public class FileController{
         fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
+        httpHeaders.add("Access-Control-Expose-Headers","Content-Disposition, Content-Length, X-Content-Transfer-Id");
+        httpHeaders.add("Content-Type",fileDTO.getFileType());
+        httpHeaders.add("Content-Length",String.valueOf(fileDTO.getFileSize()));
+        httpHeaders.add("Content-Disposition","attachment; filename=\"" + fileName + "\"");
+        //httpHeaders.add("X-Content-Transfer-Id","12345");
         return ResponseEntity.ok().headers(httpHeaders).contentLength(fileDTO.getFileSize())
-                .contentType(MediaType.parseMediaType(mimeType)).body(resource);
+                .contentType(MediaType.parseMediaType(fileDTO.getFileType())).body(resource);
     }
 
     /**

@@ -3,7 +3,7 @@
 <div layout:fragment="content">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">계정 설정</h1>
+        <h1 class="h3 mb-0 text-gray-800">계정 관리</h1>
     </div>
 
 
@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+                    <thead class="text-center">
                     <tr>
                         <th>번호</th>
                         <th>아이디</th>
@@ -27,10 +27,10 @@
                     <!--/*@thymesVar id="noticeList" type="ArrayList<NoticeDTO>"*/-->
                     <!--/*@thymesVar id="noticeId" type="String"*/-->
                     <tr th:each="user, index : ${user_list}" th:onclick="|location.href='@{/settings/account/account_view(user_uid=${user.userUid})}'|" >
-                        <td th:text="${(page_index*10)+index.count}">Tiger Nixon</td>
-                        <td th:text="${user.userId}">System Architect</td>
-                        <td th:text="${user.userName}">System Architect</td>
-                        <td th:text="${#temporals.format(user.generateTime, 'yyyy-MM-dd')}">System Architect</td>
+                        <td class="text-center index-tr" th:text="${(page_index*10)+index.count}">Tiger Nixon</td>
+                        <td class="text-center" th:text="${user.userId}">System Architect</td>
+                        <td class="text-center" th:text="${user.userName}">System Architect</td>
+                        <td class="text-center" th:text="${#temporals.format(user.generateTime, 'yyyy-MM-dd')}">System Architect</td>
                     </tr>
                     </tbody>
                 </table>

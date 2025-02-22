@@ -114,7 +114,7 @@ public class EquipmentCheckController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/","","/equipment_check_view"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/equipment_check_view"}, method = RequestMethod.GET)
     public ModelAndView equipmentCheckDetailView(@RequestParam(value = "equipment_check_id", required = true) String equipmentCheckId ) throws IOException {
         LOGGER.info("View >>>  Equipment Check Detail View");
 
@@ -126,7 +126,7 @@ public class EquipmentCheckController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/","","/equipment_check_write"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/equipment_check_write"}, method = RequestMethod.GET)
     public ModelAndView equipmentCheckWriteView(){
         LOGGER.info("View >>>  Equipment Check Write View");
 
@@ -139,7 +139,7 @@ public class EquipmentCheckController {
         return modelAndView;
     }
 
-    @RequestMapping(value = {"/","","/equipment_check_edit"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/equipment_check_edit"}, method = RequestMethod.GET)
     public ModelAndView equipmentCheckEditView(@RequestParam(value = "equipment_check_id", required = true) String equipmentCheckId ){
         LOGGER.info("View >>>  Equipment Check Edit View");
 

@@ -83,14 +83,6 @@
     WHERE
         equipment_check.equipment_check_id = #{equipmentCheckId}
 </select>
-    <select id="countTotalEquipmentCheck">
-        SELECT
-            COUNT(equipment_check_id)
-        FROM
-            equipment_check
-        WHERE
-            is_enable = true;
-    </select>
     <insert id="insertEquipmentCheck">
         INSERT INTO
         equipment_check(

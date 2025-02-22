@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xml>
 <configuration scan="true" scanPeriod="30 seconds">
     <include resource="org/springframework/boot/logging/logback/base.xml"/>
     <springProfile name="local">
@@ -55,9 +53,9 @@
     <springProfile name="prod">
         <!-- Send debug message to file -->
         <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/data/logs/tomcat/sql.log</file>
+            <file>data/logs/tomcat/sql.log</file>
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                <fileNamePattern>/data/logs/tomcat/sql.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
+                <fileNamePattern>data/logs/tomcat/sql.%d{yyyy-MM-dd}-%i.log</fileNamePattern>
                 <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                     <maxFileSize>30MB</maxFileSize>
                 </timeBasedFileNamingAndTriggeringPolicy>
